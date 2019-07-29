@@ -1,0 +1,270 @@
+1. Shell command locale
+   First, I type in the command "locale" to check
+   whether I am in the standard C or
+   POSIX locale. However, it outputs something else
+   other than LC_CTYPE="C" or LC_CTYPE="POSIX".
+   Therefore, I type in command "export LC_ALL='C'" to
+   correct the locale outputs.
+   At last, I type in command "locale" again to make sure it has
+   the correct out put afterwards.
+
+   Command:
+           locale
+           export LC_ALL='C'
+           locale
+
+2. Sort Command
+   First, I use the command "cat /usr/share/dict/words"
+   to see the contents of the file is not
+   sorted yet. Then, I used commands learn from class to sort the contents of
+   the file. After that, I use the cat command to check to see
+   if the newly created file is being sorted at the end of it.
+   Also, I use the ls command to check to see
+   if the file is bring created
+   or not.
+
+   Command:
+           cat /usr/share/dict/words
+           sort /usr/share/dict/words > words
+           cat /usr/share/dict/words
+           ls -l
+
+3. First, I use the wget command to make a text file containing the HTML of
+   the assignment's webpage. Then, I used redirection commands learn from class
+   to run the provided commands with the text file being standard input.
+
+   Command:
+        wget https://web.cs.ucla.edu/classes/winter19/cs35L/assign/assign2.html
+
+   Explanation:
+                tr -c 'A-Za-z' '[\n*]' < assign2.html
+                This command ouputs any characters that is A-Z or a-z.
+		However,"-c" to the complement of 'A-Za-z'.
+		Therefore, any characters that is not 'A-Za-z'
+                would be replace by '[\n*]' which is the new line character
+
+                tr -cs 'A-Za-z' '[\n*]' < assign2.html
+                This command output also out any characters that is A-Z or a-z
+		and replace any non alphabet characters with new line character.
+		However, the "-s" would "squeeze" the repeats of the new line
+		character which means replacing each sequence of a repeated new
+		line character that is listed in the
+                last specified SET, with a single occurrence of that character.
+
+		tr -cs 'A-Za-z' '[\n*]' < assign2.html | sort
+                This command also has the same output as the above command but
+		in a sorted order. In this case, the output is being sorted in
+		alphabetical order.
+                The reason that there are repeated words is due to the fact
+		that the sort is done based on lines and some lines have the
+		same starting word.
+
+                tr -cs 'A-Za-z' '[\n*]' < assign2.html | sort -u
+                This command has the same output as the above command
+		but with sorted unique words.
+		In this case, the output is sorted in alphabetical
+		order and any repeated sorted words are being reduced to a single
+		occurence of the word.
+		The flag "-u" only output the first instance of the ocuuring words
+		which elminates the repeated ones.
+
+                tr -cs 'A-Za-z' '[\n*]' < assign2.html | sort -u | comm - words
+                This command uses the output from the above command and compare
+		it with the "words" file line by line. Both files are sorted already
+		before the comparison. The output contain three columns.
+		The output contains three columns.
+		The first column should output the lines that is unique
+                to the output from the above command.
+		The second column should output
+		the lines that is unique to the "words" file.
+		The third column should output lines that appear in both places.
+
+		 tr -cs 'A-Za-z' '[\n*]' < assign2.html | sort -u | comm -23 - words
+                This command has the same output as above except
+		it is only showing the first column which is the column
+		that is showing lines that is
+		unique to the output from the fourth command.
+		The flag "-23" is suppressing
+                column 2 and 3 and only shows column 1.
+
+4. Spell-checking Hawaiian
+
+   Explanation: First, I obtained a copy of the Hawaiian words in the table
+                by using the wget command. Then I create the file
+		called "hwords" and put the
+                copy of the table into the file by using the mv command.
+
+   Command:
+           wget http://mauimapp.com/moolelo/hwnwdseng.htm
+           touch hwords
+           mv hwnwdseng.htm hwords
+   
+Here is the shell script buildwords : 
+
+#! /bin/sh
+
+# Find all the words that start with the <td> tag and ends with a <td> tag
+
+  grep -o "<td>.*</td>" |
+
+# Delete all the html tags that are at the beginning and at the end of the line
+
+  sed 's/<[^>]*>//g' |
+
+# Explanation : The expression first search for opening <
+                #Then, * refers to match any number of the single character
+		#that immediately precedes it which is followed by zero
+		#or more characters.
+		#The character class [ ] starts with ^ character and looks
+		#for characters not in the class which is > character.
+		#Finally, the expression searching for the > character.
+
+#  Delete the extra new line characters
+
+   sed '/^$/d' |
+
+#  Remove any English words which is deleting every even lines to be left with
+   only the Hawaiian words
+
+   sed -n '0~2p' |  
+
+#  Transfer all upper case letters with lower case letters
+   (command learned from class)                                
+
+   tr '[:upper:]' '[:lower:]' |                                  
+
+#  Transfer ASCII grave accent to ASCII apostrophe (command learned from class)
+
+   tr "\`" "\'" |                                 
+
+#  Search comma then replace with a new line character to separate the
+   two consecutive words
+
+   tr , '\n' |
+
+#  Delete any leading black spaces or tab
+
+   sed -e 's/^[ \t]*//' |
+
+#  Search white space then replace with a new line character to separate the
+   two consecutive words
+
+   sed "s/ /\n/g" |
+
+#  Delete any extra new lines after modification
+
+   sed '/^$/d' |
+
+#  Reject any entries that contain non-Hawaiian letters
+
+   sed "/[^pk\'mnwlhaeiou]/d" |
+
+#  Sort the resulting list of words and remove duplicates of the words
+
+   sort -u
+
+   After that, I create the buildwords shell script and
+   put it under the hwords file. Also, I need to change the permission
+   of the shell script file. After that, I try to run the shell script
+   by the provided command. Finally, I use the cat command
+   to display my Haiwaiian dictionary.
+
+   Command:
+           touch buildwords
+           chmod +x buildwords
+           cat hwnwdseng.htm | ./buildwords > hwords
+           cat hwords
+
+5. Checking the spelling of the Hawaiian, under the assumption
+   that hwords is a Hawaiian dictionary.
+
+   I am using my Hawaiian dictionary checking against the assignment 2 web page
+   which is assign2.html. I am changing the words from assign2.html
+   from upper case to lower case and sort all of the words
+   before checking against my Hawaiian dictionary.
+   Since I am checking for Hawaiian words, I need to
+   reject any entries that contain non-English letters
+   which is left with Hawaiian characters. 
+   I am also storing the unique result of assign2.html
+   to a file called "misspelledHawaiian" for later reference.
+   At last, I use the wc command to count the number of the misspelled words.
+
+   Command : cat assign2.html | tr '[:upper:]' '[:lower:]'
+             | tr -cs "A-Za-z" '[\n*]'
+             | sort -u | comm -23 - hwords > misspelledHawaiian
+             wc -w misspelledHawaiian
+
+             Output: 489 
+
+
+6. Running the Hawaiian dictionary on itself
+
+   I am using my Hawaiian dictionary to run on the Hawaiian dictionary itself
+
+   Command : cat hwords | tr '[:upper:]' '[:lower:]'
+             | tr -cs "pk\'mnwlhaeiou" '[\n*]'
+             | sort -u | comm -23 - hwords | wc -w
+
+             Output : 0
+
+7. I am using the provided english dictionary to check against
+   the assignment 2 web pages which is assign2.html.
+   I am changing the words from assign2.html from upper case to lower case
+   and sort all of the words before checking against the english dictionary.
+   Since I am checking for english words, I need to reject any entries that
+   contain Hawaiian letters and left with
+   alphabets. I am also storing the unique results of assign2.html to
+   a file called "misspelledEnglish" for later reference.
+   At last, I use the wc command to count the number of the misspelled words.
+
+   Command : cat assign2.html | tr '[:upper:]' '[:lower:]'
+             | tr -cs "A-Za-z" '[\n*]'
+             | sort -u | comm -23 - words > misspelledEnglish
+             wc -w misspelledEnglish
+
+             Output : 42 misspelledEnglish
+
+8. Example for words that are "misspelled" as Hawaiian, but not as English
+
+   run misspelled Hawaiian against words
+	
+   Command : cat misspelledHawaiian | comm -12 - words | wc -w
+	
+   Example : 
+		a
+		able
+		about
+		above
+		abovementioned
+		accent
+		accepts
+
+
+9. Example for words that are "misspelled" as English, but not as Hawaiian
+
+   run misspelled English against words
+
+   Command : cat misspelledEnglish | comm -12 - hwords | wc -w
+
+   Example :
+		halau
+               lau
+               wiki
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
