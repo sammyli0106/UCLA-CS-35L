@@ -1,0 +1,49 @@
+1. Suppose the other teams really had been observing all the bytes going 
+across the network. Is your resulting network still secure? If so, explain why, 
+and explain whether your answer would change if (1) you assumed the other teams 
+had also tapped your keyboards after you completed all client-server setup and had thereby obtained your team's keystrokes during later operation, or (2) you are booting off 
+USB and you assume the other teams temporarily had physical control of the USB. 
+If not, explain any weaknesses of your team's setups, focusing on possible attacks by such outside observers.
+
+Answers : 
+
+Despite that the other teams had been observing all the bytes going across
+the network, the resulting network is still secure. It is because during the entire 
+communication process, asymmetric key encryption is being applied. We are using
+a pair of keys for encryption process. For the encryption part, we are using the
+public key to encrypt messages. For the decryption part, we are using the private
+key from our computer to decrypt the messages.
+Since the other teams won’t be able to identify the private keys from our computer,
+therefore the other teams won’t be able to understand and identify the in between
+message passing in between the network.
+
+(1) : If we assume that the other teams which could be malicious users 
+had obtained our keystrokes, this means that
+our resulting network would no longer be secured anymore. It is because the other teams 
+would be able to access our team’s passphrase and that means it is possible for them to
+obtain our private keys from our computer. If they have obtained the private key which means
+they could use it to log into our computer and host. 
+This allows them to be able to decrypt the data during the communication and access to the files.
+
+(2) : If other teams temporarily had physical control of the USB, this means our resulting
+network would definitely not be secured. Since the other teams would be able to access our
+computer’s .ssh folder that is stored at the server, they would be able to access both the 
+public and private key on our computer. As a result, the other teams would be able to decrypt
+all the messages that are being sent across the network.
+
+
+2. Explain why the gpg2 --verify command in the following instructions doesn't really verify that you personally created the file in question. How would you go about fixing this problem?
+
+Answers :
+
+The verify command does not really verify that I personally created the file in question since
+it only checks that check whether the decrypted file and the decrypted signature match or not. 
+Both of file and the signature are decrypted by the public key.
+However, some malicious users could interfere with the communication between the server and the
+agent and change the message or content of the file which are then detached with a new signature.
+The command would not show any problem about the file or messages are not come from the original sender. It would just verify the tampered message with the new detached signature.
+
+One of the solution to this problem is having a certified, trusted third party to keep track
+of the original author, sender and a copy of the original file. Then, the receiver would be able
+to check the original sources and content are match to know if the received content has been 
+tampered by some malicious users.

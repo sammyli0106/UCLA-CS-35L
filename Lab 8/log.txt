@@ -1,0 +1,291 @@
+For the lab part, I work with Junhong Wang and UID : 504941113
+
+1. I connect my BeagleBone to my computer by using the USB cable that come along with it.
+
+2. After the connection, I see the external storage device that pop up at the
+   Desktop. Then, I double click and open the device.
+
+3. After I go into there, I double click the “START.htm” file and it direct me to
+   the webpage that show me how to set up my board.
+
+4. On the webpage, the flag that says “Plug in BeagleBone via USB” highlighted green
+   when I first open the webpage. Then, I install the required drivers for my mac
+   which are called “Network” and “Serial”. Next, I restart my computer after the
+   installation. The second flag that says “Install drivers” highlighted green
+   afterwards.
+
+5. I try to SSH into the BeagleBone by the following command.
+
+Command : ssh root@192.168.7.2
+
+Output : 
+
+Debian GNU/Linux 8
+
+BeagleBoard.org Debian Image 2016-10-20
+
+Support/FAQ: http://elinux.org/Beagleboard:BeagleBoneBlack_Debian
+
+default username:password is [debian:temppwd]
+
+Last login: Wed Mar  6 00:08:16 2019 from 192.168.7.3
+
+6. After I successfully SSH into the BeagleBone, I need to connect it to the
+   wifi by the following command. The access point that I need to connect to is
+   “CR3760-wifi wifi_506583d4fc5e_544e434150413937414239_managed_psk”.
+   After I run the connect command, the access point requires a wifi-password.
+   According to the instructions, I enter “3760ClassNet” as the passphrase after
+   the prompting. After I successfully connect to the wifi, I just close the
+   application connmanctl.
+
+Command : sudo connmanctl
+
+Output : connmanctl>
+
+Command : connmanctl> enable wifi
+
+Output : Error wifi: Already enabled
+
+Command : connmanctl> scan wifi
+
+Output : Scan completed for wifi
+
+Command : connmanctl> services
+
+Output : (replace this output if connect to the wifi at lab)    
+
+    UCLA_WIFI_RES        wifi_2cf7f106672f_55434c415f574946495f524553_managed_none
+    UCLA_WEB             wifi_2cf7f106672f_55434c415f574542_managed_none
+    UCLA_SECURE_RES      wifi_2cf7f106672f_55434c415f5345435552455f524553_managed_ieee8021x
+
+Command : connmanctl> agent on
+
+Output : Agent registered
+
+Command : connmanctl> connect wifi_506583d4fc5e_544e434150413937414239_managed_psk
+
+Output : "Passphrase?"
+
+Command : 3760ClassNet
+
+Output : record this in the lab
+
+Command : connmanctl> quit
+
+7. I find the IP address of my BeagleBone by running the following command.
+
+Command : ifconfig
+
+IP address of my BeagleBone : 10.97.85.67
+
+8. After having the Internet connection, I need to update the database of apt-get
+   by the following command.
+
+ Command : sudo apt-get update
+
+9. Then, I need to install xauth and xvfb for X11 forwarding support for future SSH
+   connections to the BeagleBone
+
+Command : sudo apt-get install xauth
+          sudo apt-get install xvfb
+          sudo apt-get install xterm
+
+10. Before I check the X11 factory setting, I need to download and install emacs at my
+    BeagleBone by the following command.
+
+Command : sudo apt-get install emacs
+
+11. Next, I go to the corresponding website to download and install XQuartz for
+    my mac. Next, I use emacs to edit /etc/ssh/ssh_config and change “ForwardAgent”
+    to yes and “ForwardX11” to yes. Then, I use emacs again to edit 
+    “/etc/ssh/sshd_config” files and change “X11Forwarding” to yes.
+    After that, I double check to make sure that the X11 is enabled
+    by checking the /etc/ssh/ssh_config and /etc/ssh/sshd_config files. 
+    I need to change from 'X11Forwarding no' to 'X11Forwarding yes’. Also,
+    I need to make sure that ~/.ssh/config contains 'ForwardAgent yes' 
+    and 'ForwardX11 yes’.
+
+Command : sudo emacs /etc/ssh/ssh_config
+          sudo emacs /etc/ssh/sshd_config
+
+12. I need to install Firefox in my BeagleBone by this command.
+
+Command : sudo apt-get install firefox-esr-l10n-en-gb
+
+13. The last step of the lab set up is checking that I have openssh-server
+    and openssl-client installed 
+
+Command : dpkg --get-selections | grep openssh
+
+Output : openssh-client					install
+         openssh-server					install
+         openssh-sftp-server				        install
+
+14. For mac users, I have to make changes to the setting to modify the
+    default security reasons on my own terminal. 
+    I use emacs to get into ~/.ssh/config files add lines of statements.
+
+Command : emacs ~/.ssh/config
+
+Statements : ForwardAgent yes
+             ForwardX11 yes
+
+14. This is the beginning of the lab. I am working with Jun.
+    At first, I would be acting as the server and Jun would be the agent.
+    According to the lecture slides, I start generate the public and private
+    keys by the following command. The keys are by default save to 
+    “~/.ssh/is_rsa” and “id_rsa.pub” as the default location.
+
+Command : ssh-keygen
+
+Output : Generating public/private rsa key pair.
+         Enter file in which to save the key (/root/.ssh/id_rsa):
+
+Command : Hit Enter
+
+Output : Created directory '/root/.ssh'.
+         Enter passphrase (empty for no passphrase):
+
+15. After creating the directory '/root/.ssh’, it is prompting for a passphrase.
+    Therefore, I set the passphrase as “sammy”. After I enter the selected passphrase.
+    It is promoting to enter the passphrase again, then I reenter “sammy” again.
+    The key passphrase is “sammy”
+
+Command : sammy
+
+Output : Enter same passphrase again:
+
+Command : Your identification has been saved in /root/.ssh/id_rsa.
+          Your public key has been saved in /root/.ssh/id_rsa.pub.
+          The key fingerprint is:
+          8a:dc:19:d8:82:5c:51:d8:de:5a:ca:69:56:05:7b:94 root@beaglebone
+          The key's randomart image is:
++---[RSA 2048]----+
+|    .+. ....     |
+|    ...  oE      |
+|    .. ....      |
+| . o o. +.       |
+|  o o.o*S        |
+|   . +B+         |
+|    oo+          |
+|                 |
+|                 |
++-----------------+
+
+16. After that I create an account for the client which is my partner Jun 
+    on the server by the following command. The created directory is called
+    “jun” and the created username is also called “jun”.
+    I have also set the password for the user(“jun”) to be “jun”.
+    Password : jun
+
+Command : sudo useradd -d /home/jun -m jun
+
+Command : sudo passwd jun
+
+Output : Enter new UNIX password: 
+         Retype new UNIX password: 
+         passwd: password updated successfully
+
+17. Then, I create a .ssh directory for the new user. First, I move into 
+    directory I have just created awhile ago that is called “jun” and 
+    create a .ssh directory for user “jun”
+
+Command : cd /home/jun
+
+Output : root@beaglebone:/home/jun#
+
+Command : sudo mkdir .ssh
+
+18. After that, I change the ownership and permission on .ssh directory
+    by the following command.
+
+Command : sudo chown -R jun .ssh
+          sudo chmod 700 .ssh
+
+19. At last I give my IP address to Jun and allow log in as the client and
+    run applications on my beaglebone. He test out to run both xterm and
+    firefox on my beaglebone and those two windows are successfully pop
+    up at his computer.
+
+Command : xterm
+          firefox
+
+20. After I finished acting as the server, I then become as the client this time.
+    Jun gives his IP address to me and it is 10.97.85.113.
+    First, I copy my public key to the  server for key-based authentication by the
+    following command. Jun create a username called “sammy” and the password is also
+    called “sammy”.
+
+Command : ssh-copy-id -i sammy@10.97.85.113
+
+Output : The authenticity of host '169.232.171.165 (169.232.171.165)' can't be established.
+         ECDSA key fingerprint is 8c:89:1f:ce:83:2e:01:fe:76:3b:25:2d:9d:9e:41:ab.
+         Are you sure you want to continue connecting (yes/no)? yes
+         /usr/bin/ssh-copy-id: INFO: attempting to log in with the new key(s), to filter out  
+         any that are already installed
+         /usr/bin/ssh-copy-id: INFO: 1 key(s) remain to be installed -- if you are prompted 
+         now it is to install the new keys
+         sammy@10.97.85.113's password: 
+
+Command : sammy
+
+Output : Output : Number of key(s) added: 1
+
+21. I add the private key to authentication agent (ssh-agent) by the following command.
+    The passphrase I input is the one I set up when I am acting as the server which is
+    “sammy”.
+
+Command : eval `ssh-agent`
+
+Output : Agent pid 5312
+
+Command : ssh-add
+
+Output : Enter passphrase for /root/.ssh/id_rsa: 
+
+Command : sammy
+
+Output : Identity added: /root/.ssh/id_rsa (/root/.ssh/id_rsa)
+
+22. After that, I try to SSH as a client to Jun’s server by the following command.
+
+Command : ssh -X sammy@10.97.85.113
+
+Output : 
+
+The authenticity of host '10.97.85.113 (10.97.85.113)' can't be established.
+ECDSA key fingerprint is SHA256:XLbP7jebQZiXNTy85qfQ9lUwwM88bpKITbEAXQLTEKI.
+Are you sure you want to continue connecting (yes/no)? yes
+Warning: Permanently added '10.97.85.113' (ECDSA) to the list of known hosts.
+sammy@10.97.85.113's password: 
+
+Command : sammy (Jun sets this up as server)
+
+Output : 
+
+The programs included with the Debian GNU/Linux system are free software;
+the exact distribution terms for each program are described in the
+individual files in /usr/share/doc/*/copyright.
+
+Debian GNU/Linux comes with ABSOLUTELY NO WARRANTY, to the extent
+permitted by applicable law.
+Last login: Fri Mar  8 20:21:16 2019 from 10.97.85.67
+
+Command : xterm
+
+Output : The xterm window pop up on my computer
+
+Command : firefox
+
+Output : The firefox crash report window pop up on my computer screen
+
+The above two commands are running on the server’s beagle bone and shows up
+on my computer as client.
+
+
+
+
+
+
+
+
