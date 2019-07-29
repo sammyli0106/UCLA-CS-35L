@@ -1,0 +1,99 @@
+1. First, I export the path to add /usr/local/cs/bin from the instructions of the lecture slides.  
+  After, I run the sort command to check whether I am using the new-enough version.
+
+Command :export PATH=/usr/local/cs/bin:$PATH  
+         sort --version
+
+Output : sort (GNU coreutils) 8.30
+         Copyright (C) 2018 Free Software Foundation, Inc.
+         License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>.
+         This is free software: you are free to change and redistribute it.
+         There is NO WARRANTY, to the extent permitted by law.
+
+         Written by Mike Haertel and Paul Eggert.
+
+2. Next, I investigate how well the multithreaded sort works through measuring the 
+   the performance of it. Then, we need to generate a file containing 16,777,216
+   random single-precision floating point numbers in the textual format. Each line
+   contains one number with no white space.
+
+3. Before I create the file, I use the man command to look up the od command, sed and tr
+   command for using the appropriate options for the investigation. With the od command, 
+   option -A refers to address-radix, the output format for file offsets, but we need to
+   use with n to not output the address. Also, option -t refers to format which is selecting
+   output format and follow with “fF” to indicate I am selecting floating point numbers.
+   Option -N which is read-bytes limit to the input bytes. In our case, I need to generate 
+   16,777,216 random single-precision floating point numbers, but each floating point 
+   number consist of 4 bytes. Therefore, the total number of bytes would be 67108864 bytes.
+   After that, I use the tr command to remove the blank spaces and sed command to format the
+   output to be one floating point number per line. At last, I put it into a text file called
+   “ran.txt”.
+        
+Command : od -An -t fF -N $(($((2**24)) * 4 )) < /dev/urandom | tr -s [:blank:] '\n' | sed '/^$/d' > test.txt
+
+Output : -0.096180916
+         2.413906e+10
+         6.597905e+34
+         -2.4563203
+
+4. After I have my test data, I use the time command with option p (time -p)
+   to time the command sort with g (sort -g) on the test.txt file. According to the man 
+   page of sort command, the option g refers to general-numeric-sort which is 
+   comparing the general numerical value during sorting. Besides, I also look up 
+   about the parallel option which is changing the number of sorts based on the provided
+   number of threads.The output would be send to the /dev/null. After I time the data file
+   ,I run the benchmark with different number of threads which are 1, 2, 4 and 8 threads. 
+
+Command : time -p sort -g test.txt > /dev/null
+
+Output : real 40.18
+         user 199.95
+         sys 0.83
+
+1 Thread 
+
+Command : time -p sort -g --parallel=1 test.txt > /dev/null
+
+Output : real 181.83
+         user 181.50
+         sys 0.31
+
+2 Threads 
+
+Command : time -p sort -g --parallel=2 test.txt > /dev/null
+
+Output : real 99.52
+         user 189.43
+         sys 0.48
+
+4 Threads
+
+Command : time -p sort -g --parallel=4 test.txt > /dev/null
+
+Output : real 58.34
+         user 197.25
+         sys 0.63
+
+8 Threads 
+
+Command : time -p sort -g --parallel=8 test.txt > /dev/null
+
+Output : real 37.31
+         user 200.63
+         sys 0.76
+
+Observations on the display data : 
+
+1. As we increase the number of threads for the parallel options, the output for
+   real time decrease significantly from 1 thread which is 181.83 to 
+   8 threads which is 37.31.
+
+2. However, it is the opposite case for the user time, it increases a little starting 
+   from 1 thread which is 181.50 to 8 threads which is 200.63.
+   This is the same case for sys time as well, it increases a little starting from
+   1 thread which is 0.31 to 8 threads which is 0.76.
+
+3. For the 8 threads case, all the output time which are real, user and sys time are
+   fairly close to the sort command without using any threads at all. I think the
+   default sort command might be also using 8 threads or a number really close to 8 threads 
+   to improve or increase the overall performance. 
