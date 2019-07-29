@@ -1,0 +1,24 @@
+2019-02-07  Sum Yi Li  <sum@lnxsrv07.seas.ucla.edu>
+
+	* timespec.h: (timespec_cmp):
+	Fixing the way of listing of the new and old files by removing the
+	direct subtraction between the two files' created seconds.
+	The function is being replaced with direct comparsion with if else
+	statements which is composed with the ternary operator.
+	Now, the function would return negative if A < B,
+	positive if A > B and 0 if A == B. 
+
+--- lib/timespec.h	2005-09-21 23:05:39.000000000 -0700
++++ lib/timespec.h	2019-02-06 12:51:38.772801000 -0800
+@@ -45,8 +45,9 @@
+ static inline int
+ timespec_cmp (struct timespec a, struct timespec b)
+ {
+-  int diff = a.tv_sec - b.tv_sec;
+-  return diff ? diff : a.tv_nsec - b.tv_nsec;
++  /*int diff = a.tv_sec - b.tv_sec;
++    return diff ? diff : a.tv_nsec - b.tv_nsec;*/
++  return a.tv_sec < b.tv_sec ? -1 : (a.tv_sec > b.tv_sec ? 1 : a.tv_nsec - b.tv_nsec);
+ }
+ 
+ # if ! HAVE_DECL_NANOSLEEP

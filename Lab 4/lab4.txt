@@ -1,0 +1,376 @@
+1. Download the old version of coreutils with buggy ls program
+
+Command : wget https://web.cs.ucla.edu/classes/winter19/cs35L/assign
+          /coreutils-with-bug.tar.gz
+
+2. I untar, configure, make the older version of coreutils
+
+Command : tar -xvzf coreutils-with-bug.tar.gz
+Output  : coreutils-with-bug/
+          coreutils-with-bug/GNUmakefile
+          coreutils-with-bug/old/
+          coreutils-with-bug/old/textutils/
+          coreutils-with-bug/old/textutils/NEWS
+
+3. After untag, I created a directory called ~/coreutilsBugInstall 
+   at my lab4 directory
+
+Command : mkdir coreutilsBugInstall
+
+4. Then, I find the absolute path and compile, configure and install the copy of the
+   buggy coreutils into the created directory.
+
+Command : cd coreutilsBugInstall
+          pwd	(this give me : /u/cs/ugrad/sum/lab4/coreutilsBugInstall)
+          cd ..
+          cd coreutils-with-bug
+          ./configure --prefix=/u/cs/ugrad/sum/lab4/coreutilsBugInstall
+
+Output : checking build system type... x86_64-unknown-linux-gnu
+         checking host system type... x86_64-unknown-linux-gnu
+         configure: autobuild project... GNU coreutils
+         configure: autobuild revision... 5.93
+
+Command : make
+
+Output : In file included from utimecmp.c:41:
+         utimens.h:2:5: error: conflicting types for 'futimens'
+         int futimens (int, char const *, struct timespec const [2]);
+         ^~~~~~~~
+         In file included from utimecmp.h:25,
+                 from utimecmp.c:25:
+         /usr/include/sys/stat.h:373:12: note: previous declaration of 'futimens' was here
+         extern int futimens (int __fd, const struct timespec __times[2]) __THROW;
+            ^~~~~~~~
+         make[3]: *** [Makefile:659: utimecmp.o] Error 1
+         make[3]: Leaving directory '/w/home.01/cs/ugrad/sum/lab4/coreutils-with-bug/lib'
+         make[2]: *** [Makefile:414: all] Error 2
+         make[2]: Leaving directory '/w/home.01/cs/ugrad/sum/lab4/coreutils-with-bug/lib'
+         make[1]: *** [Makefile:419: all-recursive] Error 1
+         make[1]: Leaving directory '/w/home.01/cs/ugrad/sum/lab4/coreutils-with-bug'
+         make: *** [Makefile:357: all] Error 2
+
+Command : make install
+
+Output : Making install in lib
+         make[1]: Entering directory '/w/home.01/cs/ugrad/sum/lab4/coreutils-with-bug/lib'
+         make  install-am
+         make[2]: Entering directory '/w/home.01/cs/ugrad/sum/lab4/coreutils-with-bug/lib'
+         if gcc -DHAVE_CONFIG_H -DLIBDIR=\"/u/cs/ugrad/sum/lab4/coreutilsBugInstall/lib\" 
+         -I. -I. -I..  -
+         I.. -I.   -g -O2 -MT utimecmp.o -MD -MP -MF ".deps/utimecmp.Tpo" -c -o utimecmp.o 
+         utimecmp.c; \
+         then mv -f ".deps/utimecmp.Tpo" ".deps/utimecmp.Po"; else rm -f ".deps/utimecmp.Tpo"; 
+         exit 1; fi
+         In file included from utimecmp.c:41:
+         utimens.h:2:5: error: conflicting types for 'futimens'
+         int futimens (int, char const *, struct timespec const [2]);
+         ^~~~~~~~
+         In file included from utimecmp.h:25,
+                 from utimecmp.c:25:
+         /usr/include/sys/stat.h:373:12: note: previous declaration of 'futimens' was here
+         extern int futimens (int __fd, const struct timespec __times[2]) __THROW;
+            ^~~~~~~~
+         make[2]: *** [Makefile:659: utimecmp.o] Error 1
+         make[2]: Leaving directory '/w/home.01/cs/ugrad/sum/lab4/coreutils-with-bug/lib'
+         make[1]: *** [Makefile:775: install] Error 2
+         make[1]: Leaving directory '/w/home.01/cs/ugrad/sum/lab4/coreutils-with-bug/lib'
+         make: *** [Makefile:419: install-recursive] Error 1
+
+Explanation : I encounter error after I run the command of make and make install. 
+   The error is saying that there is a conflict between a function called
+   “futimens” which exsist both at one of my system server directory 
+   (/usr/include/sys/stat.h:373:12) and the coreutils-with-bug. Since both
+   of the functions having the same name, calling to either one of them 
+   would create conflict and the system would not know which one to 
+   execute for generating the output.
+
+6. Then, I go to the coreutils-with-bug directory to create a patch file
+   that contains the patch content. After that, I patch the content by using
+   the patch command
+
+Command : emacs patch.diff  (copy and paste the patch content)
+          patch -p0 < patch.diff
+
+Output : patching file lib/utimens.c
+         patching file lib/utimens.h
+         patching file src/copy.c
+         patching file src/tee.c
+         patching file src/touch.c
+         patch unexpectedly ends in middle of line
+         Hunk #1 succeeded at 182 with fuzz 1.
+
+7. After applying the patch content, then I rerun the make and make install command again
+   at the coreutils-with-bug directory.
+
+Command : make
+          
+Output : make[3]: Nothing to be done for 'all-am'.
+         make[3]: Leaving directory '/w/home.01/cs/ugrad/sum/lab4/coreutils-with-bug/tests'
+         make[2]: Leaving directory '/w/home.01/cs/ugrad/sum/lab4/coreutils-with-bug/tests'
+         make[2]: Entering directory '/w/home.01/cs/ugrad/sum/lab4/coreutils-with-bug'
+         make[2]: Leaving directory '/w/home.01/cs/ugrad/sum/lab4/coreutils-with-bug'
+         make[1]: Leaving directory '/w/home.01/cs/ugrad/sum/lab4/coreutils-with-bug'
+
+Command : make install
+
+Output : make[1]: Entering directory '/w/home.01/cs/ugrad/sum/lab4/coreutils-with-bug'
+         make[2]: Entering directory '/w/home.01/cs/ugrad/sum/lab4/coreutils-with-bug'
+         make[2]: Nothing to be done for 'install-exec-am'.
+         make[2]: Nothing to be done for 'install-data-am'.
+         make[2]: Leaving directory '/w/home.01/cs/ugrad/sum/lab4/coreutils-with-bug'
+         make[1]: Leaving directory '/w/home.01/cs/ugrad/sum/lab4/coreutils-with-bug'
+
+Explanation : After I apply the patch, the error from the make and make install command
+              disappear. The problem is being handled because the new patch rename
+              or replace the conflicting function name with other name to avoid the
+              conflict. It should be descending order of time.
+
+8. I first storing the path of the buggy ls command into a 
+   directory in order for me to access even outside the bin of the coreutilsBugInstall
+   directory. Then I can access the buggy ls command anywhere outside the bin by
+   this command “$buggydir/ls”
+
+Command : buggydir=$PWD
+          echo $buggydir  (this gives me : /u/cs/ugrad/sum/lab4/coreutilsBugInstall/bin)
+
+9. Then I move out from the bin and reproduce the bug by typing in the command 
+   provide on the specs.
+
+Command : tmp=$(mktemp -d)
+          cd $tmp
+          touch -d '1918-11-11 11:00 GMT' wwi-armistice
+          touch now
+          sleep 1
+          touch now1
+          TZ=UTC0 $buggydir/ls -lt --full-time wwi-armistice now now1
+
+Output : -rw-r--r-- 1 sum csugrad 0 1918-11-11 11:00:00.000000000 +0000 wwi-armistice
+         -rw-r--r-- 1 sum csugrad 0 2019-02-06 18:59:58.154605727 +0000 now1
+         -rw-r--r-- 1 sum csugrad 0 2019-02-06 18:59:48.636343524 +0000 now
+
+Explanation : The listing of the file is wrong in the sense that the listing put the 
+              older files on top of the recent created files. The correct listing suppose
+              suppose to be the most recent one at the top of the list while the
+              oldest file at the bottom of the list
+
+10. After I generate the bug, I go into source code file of the ls command
+    from the coreutils-with-bug directory on a separate terminal. I suspect the 
+    bug exists due to the way the ls command handles with the comparison of the time
+    between files. Then, I try type in keyword “time”. When I was looking through
+    the source code, I found the keyword “sort_time” in a block of switch case statements.
+    Then, I found that it invokes three different functions which are “compare_ctime”,
+    “compare_mtime”, “compare_atime”. However, I look closely to the switch case statements, 
+    the “sort_reverse” is always False since our ls command does not use with option r 
+    which is enable the reverse situation.
+
+11. Therefore, I try to debug the program by putting break point on 
+    “compare_ctime”, “compare_mtime”, “compare_atime” to check whether the ls command invoke
+    one of the function to carry out the execution. 
+
+Command : gdb ~/lab4/coreutils-with-bug/src/ls
+          break compare_ctime
+          info break
+
+Output : Num     Type           Disp Enb Address            What
+         1       breakpoint     keep y   <MULTIPLE>         
+         1.1                         y     0x0000000000407040 in compare_ctime at ../lib/timespec.h:48
+         1.2                         y     0x0000000000407073 in compare_ctime at ../lib/timespec.h:48
+
+
+12. The calling of the function bypass the function “compare_ctime” and finished execution.
+    Therefore, I suspect the bug is not directly relate to “compare_ctime”
+
+Command : (gdb) run $buggydir/ls -lt --full-time wwi-armistice now now1
+
+Output : 
+
+Starting program: /w/home.01/cs/ugrad/sum/lab4/coreutils-with-bug/src/ls $buggydir/ls 
+-lt --full-time wwi-armistice now now1
+/w/home.01/cs/ugrad/sum/lab4/coreutils-with-bug/src/ls: /ls: No such file or directory
+-rw-r--r-- 1 sum csugrad 0 1918-11-11 03:00:00.000000000 -0800 wwi-armistice
+-rw-r--r-- 1 sum csugrad 0 2019-02-06 10:59:58.154605727 -0800 now1
+-rw-r--r-- 1 sum csugrad 0 2019-02-06 10:59:48.636343524 -0800 now
+[Inferior 1 (process 10305) exited with code 02]
+
+13. Then, I try to set the breakpoints for “compare_mtime”. This time the execution stops
+    at the breakpoints that I set up. After that, I step inside the 
+    compare_mtime and check its called function inside which is cmp_mtime.
+    The cmp_mtime is stored in the timespec.h from the lib directory.
+
+Command : (gdb) delete 1
+          (gdb) break compare_mtime
+          (gdb) run $buggydir/ls -lt --full-time wwi-armistice now now1
+
+14. When I step over twice inside the “cmp-mtime” function, I use command list to
+    check the function and saw it is preforming subtraction between the two 
+    provided files time in seconds. 
+
+Command : s
+          s
+          list
+
+Output : 
+
+43	/* Return negative, zero, positive if A < B, A == B, A > B, respectively.
+44	   Assume the nanosecond components are in range, or close to it.  */
+45	static inline int
+46	timespec_cmp (struct timespec a, struct timespec b)
+47	{
+48	  int diff = a.tv_sec - b.tv_sec;
+49	  return diff ? diff : a.tv_nsec - b.tv_nsec;
+50	}
+51	
+52	# if ! HAVE_DECL_NANOSLEEP
+
+15. Then I step through once more and check the value of the local variable
+    which is diff. It gives me 10 and I realized that is the seconds
+    difference between the file now1 and now which is 58-48.
+    So, it is still behaving as the way it is now. 
+
+Command : s
+          info locals
+
+Output : diff = 10
+         diff = <optimized out>
+
+16. I realize the problem might be happening at the second iteration of the
+    subtraction between the seconds. Therefore, I use the step and continue
+    command to check the local variable diff at the second iteration.
+    Then, I saw the diff variables has a negative number and seems like
+    problems with integers overflow. The problem seems to be subtracting
+    too much from a small unsigned variable would produce a large value.
+    It looks that the program mistaken the negative value as being a large value
+    that result in putting the 1918 file on the top of the list.   
+
+Command : continue
+          s
+          s
+          s
+          info locals
+          quit
+
+Output : diff = -1131661698
+         diff = <optimized out>
+
+Solutions: We can avoid using the subtraction that might results in
+           integer overflow and use direct if else comparison.
+
+17. First, I go to the coreutils-with-bug directory to find the
+    timespec.h from the lib directory and make a copy for modification.
+    Then, I use emacs to modify my copy of the time spec.h that is
+    store at the directory.
+
+Command : cd coreutils-with-bug
+          cp lib/timespec.h timespec.h
+
+Modification : 
+
+static inline int
+timespec_cmp (struct timespec a, struct timespec b)
+{
+    return a.tv_sec < b.tv_sec ? -1 : (a.tv_sec > b.tv_sec ? 1 
+    : a.tv_nsec - b.tv_nsec);
+}
+
+18. First, I use the diff -u command to produce the patch inside the 
+    coreutils-with-bug directory from lab4. 
+
+Command : cd lab4
+          cd coreutils-with-bug
+          diff -u lib/timespec.h timespec.h > patching.diff
+
+19. After I created a patch file with the diff command, I created a ChangeLog 
+    entry by emacs according to the instructions of the assignment. 
+
+Command : emacs
+          C-x 4 a
+          C-x C-s (do this after I type in the content)
+
+Content of the ChangeLog:
+
+2019-02-07  Sum Yi Li  <sum@lnxsrv07.seas.ucla.edu>
+
+        * timespec.h: (timespec_cmp):
+        Fixing the way of listing of the new and old files by removing the
+        direct subtraction between the two files' created seconds.
+        The function is being replaced with direct comparsion with if else
+        statements which is composed with the ternary operator.
+        Now, the function would return negative if A < B,
+        positive if A > B and 0 if A == B. 
+
+20. After I created the ChangeLog, I constructed a new patch file called
+    lab4.diff which contains both my coreutils fixes which is my patching.diff
+    and the message from ChangeLog by using the cp and cat command.
+    Then, I went into lab4.diff by emacs and modified the file path which is 
+    from “timespec.h” to “lib/timespec.h”. This allows me to directly apply
+    the patch which is removing the original content from the function and
+    replacing with the modified content. 
+
+Command : cp ChangeLog lab4.diff
+          cat patching.diff >> lab4.diff
+          emacs lab4.diff
+          patch -p0<lab4.diff  (this gives me : patching file lib/timespec.h)
+
+21. After applying the patch content, I have to run the make command to
+    compile and update everything.
+
+Command : make
+
+Output : 
+
+make[3]: Leaving directory '/w/home.01/cs/ugrad/sum/lab4/coreutils-with-bug/tests'
+make[2]: Leaving directory '/w/home.01/cs/ugrad/sum/lab4/coreutils-with-bug/tests'
+make[2]: Entering directory '/w/home.01/cs/ugrad/sum/lab4/coreutils-with-bug'
+make[2]: Leaving directory '/w/home.01/cs/ugrad/sum/lab4/coreutils-with-bug'
+make[1]: Leaving directory '/w/home.01/cs/ugrad/sum/lab4/coreutils-with-bug'
+
+22. Now, I retest the given command on the instructions to check if the
+    the output prints out correctly. However, I try to test the ls command
+    inside the src from the coreutils-with-bug directory. The listing
+    of the files become correct now in a descending order from the 
+    latest to the oldest according to time.
+
+Command : tmp=$(mktemp -d)
+          cd $tmp
+          touch -d '1918-11-11 11:00 GMT' wwi-armistice
+          touch now
+          sleep 1
+          touch now1
+          TZ=UTC0 /u/cs/ugrad/sum/lab4/coreutils-with-bug/src/ls -lt --full-time wwi-armistice now now1
+
+Output : -rw-r--r-- 1 sum csugrad 0 2019-02-07 19:47:02.557627308 +0000 now1
+         -rw-r--r-- 1 sum csugrad 0 2019-02-07 19:46:55.093422014 +0000 now
+         -rw-r--r-- 1 sum csugrad 0 1918-11-11 11:00:00.000000000 +0000 wwi-armistice
+
+22. At last, I go to the home directory on the SEASnet Linux servers and test with the
+    installed touch and ls utilities without the old version of coreutils.
+
+Command : cd ~
+          touch -d '1918-11-11 11:00 GMT' wwi-armistice
+          touch now
+          sleep 1
+          touch now1
+          TZ=UTC0 ls -lt --full-time wwi-armistice now now1
+
+Output : -rw-r--r-- 1 sum csugrad 0 2054-12-17 17:28:16.000000000 +0000 wwi-armistice
+         -rw-r--r-- 1 sum csugrad 0 2019-02-07 20:13:03.524644000 +0000 now1
+         -rw-r--r-- 1 sum csugrad 0 2019-02-07 20:12:48.686011000 +0000 now
+
+Explanation : The SEASnet does not recognize the 1918-11-11 as original as it is and
+              it is interpreting it as future time “2054-12-17” because there is might
+              be problem with the touch command.
+           
+          
+
+
+
+
+
+   
+
+
+          
+
+
+ 
