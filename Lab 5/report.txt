@@ -1,0 +1,394 @@
+Laboratory Part:
+
+1. First, I use the man command to look up how the command
+   tr works on the terminal.
+   Ex. tr ‘abcd’ ‘nopq’ < input_file would output nopq which is
+   replacing a with n, b with o, c with p, d with q.
+
+2. Before, I even start to write the two programs. I try to look up
+   the way command line arguments work in C. 
+   The syntax is either int main(int argc, char *argv[]) { /* ... */ }
+   or int main(int argc, char **argv) { /* ... */ }.
+   The parameter argc is an int refers to the number of command-line 
+   arguments by the user including the name of the program. 
+   The value of the argc should not be non-negative.
+   The parameter argv is array of character pointers listing all the
+   arguments. argv starts from index 0 to index args - 1 and argv[0]
+   should be the name of the program.
+
+3. Then, I try to write the buffered I/O, C transliteration program
+   tr2b.c that uses get char and put char to transliterate bytes as 
+   the tr command. I first check if the command line has more than
+   3 arguments including the name of the program. After that, I create
+   char array pointers to store the pass in two command line arguments. 
+   Then, I check to see if both from and to has the same length by
+   using the strlen function. Next, I check whether to has duplicates 
+   input by implementing two for loops, one is inside another one. At last,
+   I keep reading from standard input byte by byte and check whether there is
+   one that match with from. Once match is found, then replace it with the
+   corresponding character from the to.
+
+4. After I finish writing the buffered tr2b.c. Then I test it with two 
+   test cases to see if I get the correct results.
+
+   The first test case : 
+   Command : printf 123456789 | ./tr2b 13579 abcde
+   Output : a2b4c6d8e
+
+   The second test case :
+   Command : printf 123abcd123 | ./tr2b abcd nopq
+   Output : 123nopq123
+
+5. Then, I start writing the unbuffered I/O, C transliteration program
+   tr2u.c that uses read and write to transliterate bytes. The program
+   reads and writes single byte at a time. 
+   After I finish writing the unbuffered tr2u.c. Then I test it with the
+   same two test cases again to see if I get the correct results.
+   Next, I repeat the same described procedure but replacing getchar() with
+   read() and putchar() with write(). 
+   
+   The first test case : 
+   Command : printf 123456789 | ./tr2u 13579 abcde
+   Output : a2b4c6d8e
+
+   The second test case :
+   Command : printf 123abcd123 | ./tr2u abcd nopq
+   Output : 123nopq123
+
+6. I use the strace command to compare the system calls issued by tr2b and 
+   tr2u when copying one file to another.
+ 
+   For tr2b.c : There are a total of 1250 system calls. Within those calls,
+   611 are write system calls and 613 are read system calls. The rest
+   spread among the open, close, fstat, mmap, etc.
+   
+   Command : strace -c ./tr2b 'AB' 'XY' < output.txt > tr2bout.txt
+
+   Output : 
+
+% time     seconds  usecs/call     calls   errors  syscall
+------ ----------- ----------- --------- --------- ----------------
+ 69.23    0.000360           1       611           write
+ 30.77    0.000160           0       613           read
+  0.00    0.000000           0         2           open
+  0.00    0.000000           0         2           close
+  0.00    0.000000           0         4           fstat
+  0.00    0.000000           0         9           mmap
+  0.00    0.000000           0         4           mprotect
+  0.00    0.000000           0         1           munmap
+  0.00    0.000000           0         1           brk
+  0.00    0.000000           0         1         1 access
+  0.00    0.000000           0         1           execve
+  0.00    0.000000           0         1           arch_prctl
+------ ----------- ----------- --------- --------- ----------------
+100.00    0.000520                  1250         1 total
+
+  For tr2u.c : There are a total of 10000024 system calls. Within those calls,
+  5000000 are write system calls and 5000002 are read system calls. The rest
+  spread among the open, close, fstat, mmap, etc.
+  
+  Command : strace -c ./tr2u 'AB' 'XY' < output.txt > tr2uout.txt
+
+  Output : 
+  
+% time     seconds  usecs/call     calls    errors syscall
+------ ----------- ----------- --------- --------- ----------------
+ 54.85   20.781655           4   5000000           write
+ 45.15   17.108921           3   5000002           read
+  0.00    0.000047           7         7           mmap
+  0.00    0.000035           9         4           mprotect
+  0.00    0.000018           9         2           open
+  0.00    0.000012          12         1           munmap
+  0.00    0.000008           4         2           close
+  0.00    0.000008           4         2           fstat
+  0.00    0.000008           8         1         1 access
+  0.00    0.000007           7         1           execve
+  0.00    0.000004           4         1           brk
+  0.00    0.000004           4         1           arch_prctl
+------ ----------- ----------- --------- --------- ----------------
+100.00   37.890727              10000024         1 total
+
+7. I use the strace command to compare the system calls issued by the
+   tr2b and tr2u commands when copying a file to the terminal.
+
+   For tr2b.c : There are a total of 20684 system calls. Within those calls,
+   20045 are write system calls and 613 are read system calls. The rest
+   spread among the open, close, fstat, mmap, etc.
+
+   Command : strace -c ./tr2b 'AB' 'XY' < output.txt
+   
+   Output : 
+
+% time     seconds  usecs/call     calls    errors syscall
+------ ----------- ----------- --------- --------- ----------------
+ 97.86    0.077715           4     20045           write
+  2.14    0.001698           3       613           read
+  0.00    0.000000           0         2           open
+  0.00    0.000000           0         2           close
+  0.00    0.000000           0         4           fstat
+  0.00    0.000000           0         9           mmap
+  0.00    0.000000           0         4           mprotect
+  0.00    0.000000           0         1           munmap
+  0.00    0.000000           0         1           brk
+  0.00    0.000000           0         1         1 access
+  0.00    0.000000           0         1           execve
+  0.00    0.000000           0         1           arch_prctl
+------ ----------- ----------- --------- --------- ----------------
+100.00    0.079413                 20684         1 total
+
+  For tr2u.c : There are a total of 10000026 system calls. Within those calls,
+  5000002 are write system calls and 5000002 are read system calls. The rest
+  spread among the open, close, fstat, mmap, etc.
+  
+  Command : strace -c ./tr2u 'AB' 'XY' < output.txt
+
+  Output : 
+
+% time     seconds  usecs/call     calls    errors syscall
+------ ----------- ----------- --------- --------- ----------------
+ 55.53   24.086329           5   5000002         2 write
+ 44.47   19.292339           4   5000002           read
+  0.00    0.000007           7         1           execve
+  0.00    0.000003           3         1           brk
+  0.00    0.000000           0         2           open
+  0.00    0.000000           0         2           close
+  0.00    0.000000           0         2           fstat
+  0.00    0.000000           0         7           mmap
+  0.00    0.000000           0         4           mprotect
+  0.00    0.000000           0         1           munmap
+  0.00    0.000000           0         1         1 access
+  0.00    0.000000           0         1           arch_prctl
+------ ----------- ----------- --------- --------- ----------------
+100.00   43.378678              10000026         3 total
+
+8. Next, I use the time command to measure which program is faster among 
+   tr2b and tr2u when copying one file to another
+
+   For tr2b.c : 
+
+   Command : time ./tr2b 'AB' 'XY' < output.txt > tr2bout2.txt
+
+   Output : 
+   
+   real	 0m0.288s
+   user	 0m0.198s
+   sys	 0m0.009s
+
+   For tr2u.c : 
+
+   Command : time ./tr2u 'AB' 'XY' < output.txt > tr2uout2.txt
+
+   Output :
+
+   real	 0m9.692s
+   user	 0m1.273s
+   sys	 0m8.344s
+
+Observations : According to the time table above, the tr2b script run
+faster than the tr2u script when copying one file to another file.
+
+9. Last, I use the time command to measure which program is faster among 
+   tr2b and tr2u when copying a file to the terminal.
+
+   For tr2b.c : 
+
+   Command : time ./tr2b 'AB' 'XY' < output.txt
+   
+   Output : 
+
+   real	 0m2.826s
+   user	 0m0.242s
+   sys	 0m0.098s
+
+   For tr2u.c : 
+   
+   Command : time ./tr2u 'AB' 'XY' < output.txt
+
+   Output : 
+  
+   real	 0m23.220s
+   user	 0m2.614s
+   sys	 0m20.542s
+
+Observations : According to the time table above, the tr2b script run
+faster than the tr2u script when copying one file to the terminal.
+
+Homework Part
+
+1. For the sfrobu program, I first check if the program has the correct number
+   of command line arguments which are including the name of the program and
+   one option which is only option f. Then, I check if the program has the 
+   correct provided option which is option f. After that, I separate into 
+   two cases which are handling regular files and normal input. For handling
+   regular files, I first allocate memory for a char pointer called buffer 
+   with the size of the read-in file in order to store all the data that
+   is being read from the file. Then, I count the number of words in the
+   buffer pointer based on spaces. I manually put a space after the last
+   character. Next, I create a char double pointer called list with 
+   a size of the total words in the buffer. I create a for loop to make
+   each row of the list to store the address of the first character of each 
+   word. At last, I sort the words in the list and output. 
+   For handling regular input, I keep everything the same from assignment 4,
+   except I replace getchar() and putchar() with read() and write().  
+
+
+2. After I finish modifying the sfrob into sfrobu program, I use man command to 
+   look up tr command. I find out that the tr command would only interpret octal 
+   input as characters, so I have to turn the original input into octal form
+   before sorting. Therefore, I turn the sorted output back from the octal form 
+   into original form after sorting and before printing out the final results.  
+
+3. I use the time command to compare the overall performance of 
+   sfrob and sfrobu with three different text files which contains
+   different number of input lines. Each input lines contains 
+   a random generated character. The way I generate the random
+   characters is by writing a loop on c script that is shown below.
+
+script to generate random characters :
+
+#include <stdio.h>
+#include <ctype.h>
+#include <stdlib.h>
+#include <string.h>
+
+int main()
+{
+  for (int i = 0; i < 50000; i++)
+    {
+      char randomletter = 'A' + (random() % 26);
+      printf("%c \n", randomletter); 
+    }
+  return 0;
+}
+
+
+For sfrobu.c:
+
+   text1.txt :
+ 
+   Command : time ./sfrobu < text1.txt > outText1.txt
+
+   Output :
+   
+   real	 0m0.007s
+   user	 0m0.000s
+   sys	 0m0.004s
+
+   text2.txt :
+ 
+   Command : time ./sfrobu < text2.txt > outText2.txt
+
+   Output :
+   
+   real	 0m0.026s
+   user	 0m0.006s
+   sys	 0m0.017s
+
+   text3.txt :
+ 
+   Command : time ./sfrobu < text3.txt > outText3.txt
+
+   Output :
+   
+   real 0m0.242s
+   user 0m0.049s
+   sys  0m0.170s
+   
+For sfrob : 
+
+    text1.txt :
+ 
+   Command : time ./sfrob < text1.txt > outText4.txt
+
+   Output :
+   
+   real	 0m0.005s
+   user	 0m0.001s
+   sys	 0m0.001s
+
+   text2.txt :
+ 
+   Command : time ./sfrob < text2.txt > outText5.txt
+
+   Output :
+   
+   real	 0m0.009s
+   user	 0m0.003s
+   sys	 0m0.003s
+
+   text3.txt :
+ 
+   Command : time ./sfrob < text3.txt > outText6.txt
+
+   Output :
+   
+   real	 0m0.050s
+   user	 0m0.042s
+   sys	 0m0.003s
+
+Observations : On all three tested files, sfrob.c perform faster than the sfrobu.c 
+
+
+4. I use the time command to compare the overall performance of 
+   sfrob, sfrobu, sfrobs, sfrobu -f, and sfrobs -f.
+
+   For sfrob.c :
+   
+   Command : time ./sfrob < large.txt > sfrobOut.txt
+   
+   Output : 
+
+   real	 0m0.472s
+   user	 0m0.387s
+   sys	 0m0.017s
+    
+   For sfrobu.c : 
+   
+   Command : time ./sfrobu < large.txt > sfrobuOut.txt
+    
+   Output :
+   
+   real	 0m7.220s
+   user	 0m0.771s
+   sys	 0m6.379s
+
+   For sfrobu -f :
+
+   Command : time ./sfrobu -f < large.txt > sfrobufOut.txt   
+   
+   Output : 
+   
+   real	 0m6.537s
+   user	 0m0.761s
+   sys	 0m5.703s
+
+   For sfrobs : 
+   
+   Command : time ./sfrobs < large.txt > sfrobsOut.txt
+   
+   Output : 
+
+   real	 0m0.114s
+   user	 0m0.028s
+   sys	 0m0.021s
+
+   For sfrobs -f : 
+
+   Command : ./sfrobs -f < large.txt > sfrobsfOut.txt
+
+   Output : 
+    
+   real	 0m0.107s
+   user	 0m0.025s
+   sys	 0m0.023s
+   
+Observations : The fastest scripts among all is sfrobs, then the next fastest is sfrob,
+the slowest is sfrobu. However, if we account with option f, the script with option f 
+always run faster than the script without the option f. According to the table above,
+sfrobu -f run faster than sfrobu alone and sfrobs -f run faster then sfrobs.
+
+
+
+
+
+
