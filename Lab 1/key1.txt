@@ -1,0 +1,163 @@
+Exercise 1.1 : Moving around in Emacs
+
+1. emacs exer1.html (open the file)
+
+2. C-s HTML Enter
+
+3. C-s scavenger Enter M-b 
+
+4. C-s self-referential Enter M-b 
+
+5. C-s arrow Enter M-b
+
+6. C-e
+
+7. C-a
+
+8. Yes. I have already found it in the fewer keystrokes way. 
+   Here is an example : go to the line beginning can do "C-h a" 
+   instead of pressing multiple times of left arrow keyboard.
+
+9. I did not move the cursor using arrow keys. 
+   I move the cursor by keystrokes.
+
+10. C-x C-c
+
+Exercise 1.2 : Deleting text in Emacs
+
+1. emacs exer2.html (open the file)
+
+2. M-g g 18 Enter C-k 
+
+3. C-s DE Enter C-a C-k     	  
+
+4. C-s < ! C-a C-SP down down down C-w 		
+
+5. C-s < ! C-b C-b M-z >
+   C-s < ! C-a C-SP down down down down C-w 
+   C-s < ! C-a C-k
+
+   C-x C-s
+   C-x C-c
+
+   (down refers to the downward keyboard key)
+
+Exercise 1.3 : Inserting text in Emacs
+
+1. emacs exer3.html (open the file)
+
+2. M-% A s s i g n m e n t SP 1 Enter A s s i g n m e n t SP 4 2 Enter yes yes Enter
+
+3. M-% U T F - 8 Enter U S - A S C I I Enter yes
+
+4. M-< C-M-s [ ^ [ : a s c i i : ] ] C-a C-k
+
+5. M-< C-s < / o l > Enter C-o
+
+6. C-x C-s C-x C-c
+
+Exercise 1.4 : Other editing tasks in Emacs            
+
+1. cat exer2.html exer2.diff >exer4.html
+
+2. emacs exer4.html (use Emacs to edit the file)
+
+3 & 4. (combined together)
+
+   M-> C-r < ! C-b C-f C-SP C-e M-w M-g g 4 0 2 Enter C-y 
+    
+   M-> M-g g 4 4 1 Enter C-f C-SP down down down C-e 
+   M-w M-g g 3 8 7 Enter C-y C-a C-d up C-d up C-d
+   
+   M-> M-g g 4 3 0 Enter C-f C-SP down down C-e 
+   M-w M-g g 3 4 0 Enter C-y C-a C-d up C-d
+   
+   M-> M-g g 4 4 5 Enter C-f C-SP C-e M-w M-g g 3 8 8 Enter C-y C-SP C-e C-w
+
+   M-> M-g g 4 2 3 Enter C-f C-SP C-e M-w M-g g 1 2 7 Enter C-y
+
+   M-> M-g g 4 1 4 Enter C-f C-SP C-e M-w M-g g 1 8 Enter C-y  
+
+5. M-> C-r - - - SP C-a C-SP C-x ] C-w
+
+6. C-x u
+
+7. M-> - - > M-g g 4 0 8 Enter < ! - -
+
+8. M-x count-matches Enter < o l > Enter 
+
+   M-< C-s < o l > M-% < o L > Enter !
+   
+   There are a total of 7 occurrences
+
+9. Execute the command "diff -u exer1.html exer4.html >exer4.diff" 
+   and viewing the file on the browser
+
+Exercise 1.5 : Doing commands in Emacs
+
+1. M-x m a k e - d i r e c t o r y Enter j u n k Enter
+
+2. C-x d j u n k Enter C-x C-f h e l l o . c Enter
+
+   Copy and paste the given code from the course website. (command-c command-v)
+
+3. M-x c o m p i l e Enter C-a C-k g c c - o h e l l o SP h e l l o . c Enter
+
+4. C-x b h e l l o - o u t Enter
+
+   C-u M-! . / h e l l o Enter	
+
+5. Copy the above output into the file here
+
+	#include <stdio.h>
+	int
+	main (void)
+	{
+  	 char n = '\n', b = '\\', q = '"';
+  	 char const *p = "#include <stdio.h>%cint%cmain (void)%c{%c  char n = '%cn', b = '\
+  	 %c%c', q = '%c';%c  char const *p = %c%s%c;%c  printf (p, n, n, n, n, b, b, b, q, n\
+  	 , q, p, q, n, n, n, n);%c  return 0;%c}%c";
+  	 printf (p, n, n, n, n, b, b, b, q, n, q, p, q, n, n, n, n);
+  	 return 0;
+	}
+
+Exercise 1.6
+
+1. C-x b Enter
+
+2. ( r a n d o m SP " 5 0 5 - 1 4 6 - 7 0 2 " ) C-j
+    Output : 1303432374904305039
+
+3. ( s e t q SP x SP ( r a n d o m ) ) C-j
+   output : -858058326379943819
+	
+   ( s e t q SP y SP ( r a n d o m ) ) C-j
+   output : -125765405402424337
+
+4. ( * SP x SP y) C-j
+   output : 451387698661432379
+   The answer is not mathematically correct
+
+5. M-: ( * SP x SP y) C-j
+   Output : 451387698661432379 (#o31035153415254416073, #x643a6b86ab21c3b)
+   Aside from outputting the original answer, it also output the octal and hexadecimal
+   notation of the answer.
+
+6. The two random integers are not truly random in the mathematical sense. It is because 
+   from the random numbers documentation, the given "seed" number generates the
+   pseudo-random numbers. According to any given seed, the random function always
+   produce the the same sequence of numbers. Emacs always start with the same seed 
+   value, so the sequence of values of random is actually the same in each run at
+   Emacs. 
+
+7. When we have two-variable product, the product expression is 2^x * 2^y. The range of   
+   exponent x is from 0 to 29. The range of exponent y is from 0 to 29. The range of the 
+   addition between the exponent x and exponent y has to be within 0 to 29. If we fix x 
+   exponent to be zero, the y exponent could be from 0 to 29. There are 30 combinations
+   for this case. If we fix x exponent to be one, the y exponent could be from 0 to 28.
+   There are 29 combinations for this case. This pattern repeats up until the case 
+   when x exponent is 29 and y exponent is 0. After that, we sum up over all values of x, 
+   this means 1 plus 2 plus so on and up until 30. The sum would be 465. The total possible  
+   combinations between the x component and y component are 30 * 30 = 900. Therefore,the   
+   probability that the two-variable product mentioned above is mathematically incorrect  
+   is 1-(465/900) = 435/900.

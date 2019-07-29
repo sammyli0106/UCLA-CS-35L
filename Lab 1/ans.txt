@@ -1,0 +1,523 @@
+1. What shell command uses the man program to print all the commands that have a specific word in their man page (or at least the description part of the man page)? (hint: man man)
+
+Explanation : I first type in the command "man man", then read through the page and found
+              the command that says, "Search the short descriptions and manual page names for the
+              keyword printf as regular expression. Print out any matches."
+
+Answer : man man
+         man -k printf, "printf" is the keyword
+
+2.Where are the mv and sh programs located in the file system? List any shell commands you used to answer this question.
+
+Explanation: I first type in command "man -k path", then read through the listing and
+             found the command which that says, "shows the full path of (shell) commands."
+
+Answer : man -k path, "path" is the keyword
+       	 which mv
+	 which sh
+
+	 The mv program locates in /usr/bin/mv.
+	 The sh program locates in /usr/bin/sh.
+
+3.What executable programs have names that are exactly two characters long and end in r,
+and what do they do? List any shell commands you used to answer this question.
+
+Explanation : I first use echo command to find the the locations of the executable programs.
+		After I find the locations, I am searching through the directory with program
+		names that are two characters and end in r. Character ‘?’ indicates one
+		character. 
+
+Answer: 
+	echo $PATH
+	man find
+	find /usr/local/cs/bin -executable -name ?r
+	man pr
+	man tr
+
+	Returned output from “echo $PATH” : 
+	/usr/local/cs/bin:/usr/lib64/qt-3.3/bin:/u/cs/ugrad/sum/perl5/bin:/		         	
+	usr/local/bin:/usr/bin:/usr/X11R6/bin:/usr/local/cs/bin:/u/cs/ugrad/sum/bin
+
+	Returned output from the find command : 
+	/usr/local/cs/bin/pr
+	/usr/local/cs/bin/tr
+
+	pr (1)               - convert text files for printing
+	tr (1)               - translate or delete characters
+
+4. When you execute the command named by the symbolic link /usr/bin/emacs, which file
+actually is executed? List any shell commands you used to answer this question.
+
+Explanation : I first use command "man -k directory" to find about the ls command.
+              Then, I use the man command to find out more about the ls -l command.
+              The command ls -l lists the total files in the directory and subdirectories
+
+Answer : man -k directory
+         man ls
+         ls -l /usr/bin/emacs
+         ls -l /etc/alternatives/emacs. 
+
+	 The symbolic link is executing the /usr/bin/emacs-24.3. 
+
+5. What is the version number of the /usr/bin/gcc program? of the plain gcc program?
+Why are they different programs?
+
+Explanation : I first type in command "man gcc" then read through the listing
+              and found the command "--version", which print the version number 
+
+Answer : man gcc
+       	 /usr/bin/gcc --version
+	 gcc --version
+
+	 The version number of /usr/bin/gcc is gcc (GCC) 4.8.5 20150623 (Red Hat 4.8.5-36)
+	 The version number of plain gcc is gcc (GCC) 8.2.0
+
+	 They are different because /usr/bin/gcc refers to the gcc in the user bin directory
+	 while the plain gcc is located at the shared library
+
+6. The chmod program changes permissions on a file.
+What does the symbolic mode u+sx,o-w mean, in terms of permissions?
+
+Answer : u+sx means the owner of the file is given two extra permissions which are
+       	 set user or group ID on execution and execute (or search for directories).
+
+	 o-w means permission to write is removed from the users who are not the owner of
+	 the file or members of the group
+
+7. Use the find command to find all directories modified in the last four weeks that are
+located under (or are the same as) the directory /usr/local/cs. List any shell commands
+you used to answer this question.
+
+Explanation : I first use the man command to read the descriptions of the find command.
+              Among the descriptions, I found "-type d" & "-mtime" are useful. 
+
+Answer : man find
+         find /usr/local/cs -type d -mtime -28
+         find /usr/local/cs -type d -mtime -28 | wc -l 
+         The total number of directories are 309
+       	 
+/usr/local/cs
+/usr/local/cs/src/bison
+/usr/local/cs/src/bison/RCS
+/usr/local/cs/src/grep
+/usr/local/cs/src/grep/RCS
+/usr/local/cs/src/ocaml
+/usr/local/cs/src/ocaml/RCS
+/usr/local/cs/share/info
+/usr/local/cs/share/man/man1
+/usr/local/cs/share/man/man3
+/usr/local/cs/bin
+/usr/local/cs/.del
+/usr/local/cs/.del/grep-3.1
+/usr/local/cs/.del/grep-3.2
+/usr/local/cs/.del/grep-3.2/share
+/usr/local/cs/.del/grep-3.2/share/locale
+/usr/local/cs/.del/grep-3.2/share/locale/af
+/usr/local/cs/.del/grep-3.2/share/locale/af/LC_MESSAGES
+/usr/local/cs/.del/grep-3.2/share/locale/be
+/usr/local/cs/.del/grep-3.2/share/locale/be/LC_MESSAGES
+/usr/local/cs/.del/grep-3.2/share/locale/bg
+/usr/local/cs/.del/grep-3.2/share/locale/bg/LC_MESSAGES
+/usr/local/cs/.del/grep-3.2/share/locale/ca
+/usr/local/cs/.del/grep-3.2/share/locale/ca/LC_MESSAGES
+/usr/local/cs/.del/grep-3.2/share/locale/cs
+/usr/local/cs/.del/grep-3.2/share/locale/cs/LC_MESSAGES
+/usr/local/cs/.del/grep-3.2/share/locale/da
+/usr/local/cs/.del/grep-3.2/share/locale/da/LC_MESSAGES
+/usr/local/cs/.del/grep-3.2/share/locale/de
+/usr/local/cs/.del/grep-3.2/share/locale/de/LC_MESSAGES
+/usr/local/cs/.del/grep-3.2/share/locale/el
+/usr/local/cs/.del/grep-3.2/share/locale/el/LC_MESSAGES
+/usr/local/cs/.del/grep-3.2/share/locale/eo
+/usr/local/cs/.del/grep-3.2/share/locale/eo/LC_MESSAGES
+/usr/local/cs/.del/grep-3.2/share/locale/es
+/usr/local/cs/.del/grep-3.2/share/locale/es/LC_MESSAGES
+/usr/local/cs/.del/grep-3.2/share/locale/et
+/usr/local/cs/.del/grep-3.2/share/locale/et/LC_MESSAGES
+/usr/local/cs/.del/grep-3.2/share/locale/eu
+/usr/local/cs/.del/grep-3.2/share/locale/eu/LC_MESSAGES
+/usr/local/cs/.del/grep-3.2/share/locale/fi
+/usr/local/cs/.del/grep-3.2/share/locale/fi/LC_MESSAGES
+/usr/local/cs/.del/grep-3.2/share/locale/fr
+/usr/local/cs/.del/grep-3.2/share/locale/fr/LC_MESSAGES
+/usr/local/cs/.del/grep-3.2/share/locale/ga
+/usr/local/cs/.del/grep-3.2/share/locale/ga/LC_MESSAGES
+/usr/local/cs/.del/grep-3.2/share/locale/gl
+/usr/local/cs/.del/grep-3.2/share/locale/gl/LC_MESSAGES
+/usr/local/cs/.del/grep-3.2/share/locale/he
+/usr/local/cs/.del/grep-3.2/share/locale/he/LC_MESSAGES
+/usr/local/cs/.del/grep-3.2/share/locale/hr
+/usr/local/cs/.del/grep-3.2/share/locale/hr/LC_MESSAGES
+/usr/local/cs/.del/grep-3.2/share/locale/hu
+/usr/local/cs/.del/grep-3.2/share/locale/hu/LC_MESSAGES
+/usr/local/cs/.del/grep-3.2/share/locale/id
+/usr/local/cs/.del/grep-3.2/share/locale/id/LC_MESSAGES
+/usr/local/cs/.del/grep-3.2/share/locale/it
+/usr/local/cs/.del/grep-3.2/share/locale/it/LC_MESSAGES
+/usr/local/cs/.del/grep-3.2/share/locale/ja
+/usr/local/cs/.del/grep-3.2/share/locale/ja/LC_MESSAGES
+/usr/local/cs/.del/grep-3.2/share/locale/ko
+/usr/local/cs/.del/grep-3.2/share/locale/ko/LC_MESSAGES
+/usr/local/cs/.del/grep-3.2/share/locale/ky
+/usr/local/cs/.del/grep-3.2/share/locale/ky/LC_MESSAGES
+/usr/local/cs/.del/grep-3.2/share/locale/lt
+/usr/local/cs/.del/grep-3.2/share/locale/lt/LC_MESSAGES
+/usr/local/cs/.del/grep-3.2/share/locale/nb
+/usr/local/cs/.del/grep-3.2/share/locale/nb/LC_MESSAGES
+/usr/local/cs/.del/grep-3.2/share/locale/nl
+/usr/local/cs/.del/grep-3.2/share/locale/nl/LC_MESSAGES
+/usr/local/cs/.del/grep-3.2/share/locale/pa
+/usr/local/cs/.del/grep-3.2/share/locale/pa/LC_MESSAGES
+/usr/local/cs/.del/grep-3.2/share/locale/pl
+/usr/local/cs/.del/grep-3.2/share/locale/pl/LC_MESSAGES
+/usr/local/cs/.del/grep-3.2/share/locale/pt
+/usr/local/cs/.del/grep-3.2/share/locale/pt/LC_MESSAGES
+/usr/local/cs/.del/grep-3.2/share/locale/pt_BR
+/usr/local/cs/.del/grep-3.2/share/locale/pt_BR/LC_MESSAGES
+/usr/local/cs/.del/grep-3.2/share/locale/ro
+/usr/local/cs/.del/grep-3.2/share/locale/ro/LC_MESSAGES
+/usr/local/cs/.del/grep-3.2/share/locale/ru
+/usr/local/cs/.del/grep-3.2/share/locale/ru/LC_MESSAGES
+/usr/local/cs/.del/grep-3.2/share/locale/sk
+/usr/local/cs/.del/grep-3.2/share/locale/sk/LC_MESSAGES
+/usr/local/cs/.del/grep-3.2/share/locale/sl
+/usr/local/cs/.del/grep-3.2/share/locale/sl/LC_MESSAGES
+/usr/local/cs/.del/grep-3.2/share/locale/sr
+/usr/local/cs/.del/grep-3.2/share/locale/sr/LC_MESSAGES
+/usr/local/cs/.del/grep-3.2/share/locale/sv
+/usr/local/cs/.del/grep-3.2/share/locale/sv/LC_MESSAGES
+/usr/local/cs/.del/grep-3.2/share/locale/th
+/usr/local/cs/.del/grep-3.2/share/locale/th/LC_MESSAGES
+/usr/local/cs/.del/grep-3.2/share/locale/tr
+/usr/local/cs/.del/grep-3.2/share/locale/tr/LC_MESSAGES
+/usr/local/cs/.del/grep-3.2/share/locale/uk
+/usr/local/cs/.del/grep-3.2/share/locale/uk/LC_MESSAGES
+/usr/local/cs/.del/grep-3.2/share/locale/vi
+/usr/local/cs/.del/grep-3.2/share/locale/vi/LC_MESSAGES
+/usr/local/cs/.del/grep-3.2/share/locale/zh_CN
+/usr/local/cs/.del/grep-3.2/share/locale/zh_CN/LC_MESSAGES
+/usr/local/cs/.del/grep-3.2/share/locale/zh_TW
+/usr/local/cs/.del/grep-3.2/share/locale/zh_TW/LC_MESSAGES
+/usr/local/cs/.del/grep-3.2/share/man
+/usr/local/cs/.del/grep-3.2/share/man/man1
+/usr/local/cs/.del/grep-3.2/share/info
+/usr/local/cs/.del/grep-3.2/bin
+/usr/local/cs/bison-3.2.3
+/usr/local/cs/bison-3.2.3/share
+/usr/local/cs/bison-3.2.3/share/locale
+/usr/local/cs/bison-3.2.3/share/locale/ca
+/usr/local/cs/bison-3.2.3/share/locale/ca/LC_MESSAGES
+/usr/local/cs/bison-3.2.3/share/locale/da
+/usr/local/cs/bison-3.2.3/share/locale/da/LC_MESSAGES
+/usr/local/cs/bison-3.2.3/share/locale/de
+/usr/local/cs/bison-3.2.3/share/locale/de/LC_MESSAGES
+/usr/local/cs/bison-3.2.3/share/locale/el
+/usr/local/cs/bison-3.2.3/share/locale/el/LC_MESSAGES
+/usr/local/cs/bison-3.2.3/share/locale/eo
+/usr/local/cs/bison-3.2.3/share/locale/eo/LC_MESSAGES
+/usr/local/cs/bison-3.2.3/share/locale/es
+/usr/local/cs/bison-3.2.3/share/locale/es/LC_MESSAGES
+/usr/local/cs/bison-3.2.3/share/locale/et
+/usr/local/cs/bison-3.2.3/share/locale/et/LC_MESSAGES
+/usr/local/cs/bison-3.2.3/share/locale/fi
+/usr/local/cs/bison-3.2.3/share/locale/fi/LC_MESSAGES
+/usr/local/cs/bison-3.2.3/share/locale/fr
+/usr/local/cs/bison-3.2.3/share/locale/fr/LC_MESSAGES
+/usr/local/cs/bison-3.2.3/share/locale/ga
+/usr/local/cs/bison-3.2.3/share/locale/ga/LC_MESSAGES
+/usr/local/cs/bison-3.2.3/share/locale/hr
+/usr/local/cs/bison-3.2.3/share/locale/hr/LC_MESSAGES
+/usr/local/cs/bison-3.2.3/share/locale/id
+/usr/local/cs/bison-3.2.3/share/locale/id/LC_MESSAGES
+/usr/local/cs/bison-3.2.3/share/locale/it
+/usr/local/cs/bison-3.2.3/share/locale/it/LC_MESSAGES
+/usr/local/cs/bison-3.2.3/share/locale/ja
+/usr/local/cs/bison-3.2.3/share/locale/ja/LC_MESSAGES
+/usr/local/cs/bison-3.2.3/share/locale/ms
+/usr/local/cs/bison-3.2.3/share/locale/ms/LC_MESSAGES
+/usr/local/cs/bison-3.2.3/share/locale/nb
+/usr/local/cs/bison-3.2.3/share/locale/nb/LC_MESSAGES
+/usr/local/cs/bison-3.2.3/share/locale/nl
+/usr/local/cs/bison-3.2.3/share/locale/nl/LC_MESSAGES
+/usr/local/cs/bison-3.2.3/share/locale/pl
+/usr/local/cs/bison-3.2.3/share/locale/pl/LC_MESSAGES
+/usr/local/cs/bison-3.2.3/share/locale/pt
+/usr/local/cs/bison-3.2.3/share/locale/pt/LC_MESSAGES
+/usr/local/cs/bison-3.2.3/share/locale/pt_BR
+/usr/local/cs/bison-3.2.3/share/locale/pt_BR/LC_MESSAGES
+/usr/local/cs/bison-3.2.3/share/locale/ro
+/usr/local/cs/bison-3.2.3/share/locale/ro/LC_MESSAGES
+/usr/local/cs/bison-3.2.3/share/locale/ru
+/usr/local/cs/bison-3.2.3/share/locale/ru/LC_MESSAGES
+/usr/local/cs/bison-3.2.3/share/locale/sr
+/usr/local/cs/bison-3.2.3/share/locale/sr/LC_MESSAGES
+/usr/local/cs/bison-3.2.3/share/locale/sv
+/usr/local/cs/bison-3.2.3/share/locale/sv/LC_MESSAGES
+/usr/local/cs/bison-3.2.3/share/locale/tr
+/usr/local/cs/bison-3.2.3/share/locale/tr/LC_MESSAGES
+/usr/local/cs/bison-3.2.3/share/locale/uk
+/usr/local/cs/bison-3.2.3/share/locale/uk/LC_MESSAGES
+/usr/local/cs/bison-3.2.3/share/locale/vi
+/usr/local/cs/bison-3.2.3/share/locale/vi/LC_MESSAGES
+/usr/local/cs/bison-3.2.3/share/locale/zh_CN
+/usr/local/cs/bison-3.2.3/share/locale/zh_CN/LC_MESSAGES
+/usr/local/cs/bison-3.2.3/share/locale/zh_TW
+/usr/local/cs/bison-3.2.3/share/locale/zh_TW/LC_MESSAGES
+/usr/local/cs/bison-3.2.3/share/locale/ast
+/usr/local/cs/bison-3.2.3/share/locale/ast/LC_MESSAGES
+/usr/local/cs/bison-3.2.3/share/locale/gl
+/usr/local/cs/bison-3.2.3/share/locale/gl/LC_MESSAGES
+/usr/local/cs/bison-3.2.3/share/locale/hu
+/usr/local/cs/bison-3.2.3/share/locale/hu/LC_MESSAGES
+/usr/local/cs/bison-3.2.3/share/locale/ia
+/usr/local/cs/bison-3.2.3/share/locale/ia/LC_MESSAGES
+/usr/local/cs/bison-3.2.3/share/locale/ky
+/usr/local/cs/bison-3.2.3/share/locale/ky/LC_MESSAGES
+/usr/local/cs/bison-3.2.3/share/locale/lt
+/usr/local/cs/bison-3.2.3/share/locale/lt/LC_MESSAGES
+/usr/local/cs/bison-3.2.3/share/locale/lv
+/usr/local/cs/bison-3.2.3/share/locale/lv/LC_MESSAGES
+/usr/local/cs/bison-3.2.3/share/locale/sl
+/usr/local/cs/bison-3.2.3/share/locale/sl/LC_MESSAGES
+/usr/local/cs/bison-3.2.3/share/locale/sq
+/usr/local/cs/bison-3.2.3/share/locale/sq/LC_MESSAGES
+/usr/local/cs/bison-3.2.3/share/locale/th
+/usr/local/cs/bison-3.2.3/share/locale/th/LC_MESSAGES
+/usr/local/cs/bison-3.2.3/share/aclocal
+/usr/local/cs/bison-3.2.3/share/doc
+/usr/local/cs/bison-3.2.3/share/doc/bison
+/usr/local/cs/bison-3.2.3/share/doc/bison/examples
+/usr/local/cs/bison-3.2.3/share/doc/bison/examples/c++
+/usr/local/cs/bison-3.2.3/share/doc/bison/examples/calc++
+/usr/local/cs/bison-3.2.3/share/doc/bison/examples/mfcalc
+/usr/local/cs/bison-3.2.3/share/doc/bison/examples/rpcalc
+/usr/local/cs/bison-3.2.3/share/bison
+/usr/local/cs/bison-3.2.3/share/bison/m4sugar
+/usr/local/cs/bison-3.2.3/share/bison/xslt
+/usr/local/cs/bison-3.2.3/share/man
+/usr/local/cs/bison-3.2.3/share/man/man1
+/usr/local/cs/bison-3.2.3/share/info
+/usr/local/cs/bison-3.2.3/bin
+/usr/local/cs/bison-3.2.3/lib
+/usr/local/cs/ocaml-4.07.1
+/usr/local/cs/ocaml-4.07.1/bin
+/usr/local/cs/ocaml-4.07.1/lib
+/usr/local/cs/ocaml-4.07.1/lib/ocaml
+/usr/local/cs/ocaml-4.07.1/lib/ocaml/stublibs
+/usr/local/cs/ocaml-4.07.1/lib/ocaml/compiler-libs
+/usr/local/cs/ocaml-4.07.1/lib/ocaml/caml
+/usr/local/cs/ocaml-4.07.1/lib/ocaml/threads
+/usr/local/cs/ocaml-4.07.1/lib/ocaml/vmthreads
+/usr/local/cs/ocaml-4.07.1/lib/ocaml/ocamldoc
+/usr/local/cs/ocaml-4.07.1/man
+/usr/local/cs/ocaml-4.07.1/man/man1
+/usr/local/cs/ocaml-4.07.1/man/man3
+/usr/local/cs/grep-3.3
+/usr/local/cs/grep-3.3/share
+/usr/local/cs/grep-3.3/share/locale
+/usr/local/cs/grep-3.3/share/locale/af
+/usr/local/cs/grep-3.3/share/locale/af/LC_MESSAGES
+/usr/local/cs/grep-3.3/share/locale/be
+/usr/local/cs/grep-3.3/share/locale/be/LC_MESSAGES
+/usr/local/cs/grep-3.3/share/locale/bg
+/usr/local/cs/grep-3.3/share/locale/bg/LC_MESSAGES
+/usr/local/cs/grep-3.3/share/locale/ca
+/usr/local/cs/grep-3.3/share/locale/ca/LC_MESSAGES
+/usr/local/cs/grep-3.3/share/locale/cs
+/usr/local/cs/grep-3.3/share/locale/cs/LC_MESSAGES
+/usr/local/cs/grep-3.3/share/locale/da
+/usr/local/cs/grep-3.3/share/locale/da/LC_MESSAGES
+/usr/local/cs/grep-3.3/share/locale/de
+/usr/local/cs/grep-3.3/share/locale/de/LC_MESSAGES
+/usr/local/cs/grep-3.3/share/locale/el
+/usr/local/cs/grep-3.3/share/locale/el/LC_MESSAGES
+/usr/local/cs/grep-3.3/share/locale/eo
+/usr/local/cs/grep-3.3/share/locale/eo/LC_MESSAGES
+/usr/local/cs/grep-3.3/share/locale/es
+/usr/local/cs/grep-3.3/share/locale/es/LC_MESSAGES
+/usr/local/cs/grep-3.3/share/locale/et
+/usr/local/cs/grep-3.3/share/locale/et/LC_MESSAGES
+/usr/local/cs/grep-3.3/share/locale/eu
+/usr/local/cs/grep-3.3/share/locale/eu/LC_MESSAGES
+/usr/local/cs/grep-3.3/share/locale/fi
+/usr/local/cs/grep-3.3/share/locale/fi/LC_MESSAGES
+/usr/local/cs/grep-3.3/share/locale/fr
+/usr/local/cs/grep-3.3/share/locale/fr/LC_MESSAGES
+/usr/local/cs/grep-3.3/share/locale/ga
+/usr/local/cs/grep-3.3/share/locale/ga/LC_MESSAGES
+/usr/local/cs/grep-3.3/share/locale/gl
+/usr/local/cs/grep-3.3/share/locale/gl/LC_MESSAGES
+/usr/local/cs/grep-3.3/share/locale/he
+/usr/local/cs/grep-3.3/share/locale/he/LC_MESSAGES
+/usr/local/cs/grep-3.3/share/locale/hr
+/usr/local/cs/grep-3.3/share/locale/hr/LC_MESSAGES
+/usr/local/cs/grep-3.3/share/locale/hu
+/usr/local/cs/grep-3.3/share/locale/hu/LC_MESSAGES
+/usr/local/cs/grep-3.3/share/locale/id
+/usr/local/cs/grep-3.3/share/locale/id/LC_MESSAGES
+/usr/local/cs/grep-3.3/share/locale/it
+/usr/local/cs/grep-3.3/share/locale/it/LC_MESSAGES
+/usr/local/cs/grep-3.3/share/locale/ja
+/usr/local/cs/grep-3.3/share/locale/ja/LC_MESSAGES
+/usr/local/cs/grep-3.3/share/locale/ko
+/usr/local/cs/grep-3.3/share/locale/ko/LC_MESSAGES
+/usr/local/cs/grep-3.3/share/locale/ky
+/usr/local/cs/grep-3.3/share/locale/ky/LC_MESSAGES
+/usr/local/cs/grep-3.3/share/locale/lt
+/usr/local/cs/grep-3.3/share/locale/lt/LC_MESSAGES
+/usr/local/cs/grep-3.3/share/locale/nb
+/usr/local/cs/grep-3.3/share/locale/nb/LC_MESSAGES
+/usr/local/cs/grep-3.3/share/locale/nl
+/usr/local/cs/grep-3.3/share/locale/nl/LC_MESSAGES
+/usr/local/cs/grep-3.3/share/locale/pa
+/usr/local/cs/grep-3.3/share/locale/pa/LC_MESSAGES
+/usr/local/cs/grep-3.3/share/locale/pl
+/usr/local/cs/grep-3.3/share/locale/pl/LC_MESSAGES
+/usr/local/cs/grep-3.3/share/locale/pt
+/usr/local/cs/grep-3.3/share/locale/pt/LC_MESSAGES
+/usr/local/cs/grep-3.3/share/locale/pt_BR
+/usr/local/cs/grep-3.3/share/locale/pt_BR/LC_MESSAGES
+/usr/local/cs/grep-3.3/share/locale/ro
+/usr/local/cs/grep-3.3/share/locale/ro/LC_MESSAGES
+/usr/local/cs/grep-3.3/share/locale/ru
+/usr/local/cs/grep-3.3/share/locale/ru/LC_MESSAGES
+/usr/local/cs/grep-3.3/share/locale/sk
+/usr/local/cs/grep-3.3/share/locale/sk/LC_MESSAGES
+/usr/local/cs/grep-3.3/share/locale/sl
+/usr/local/cs/grep-3.3/share/locale/sl/LC_MESSAGES
+/usr/local/cs/grep-3.3/share/locale/sr
+/usr/local/cs/grep-3.3/share/locale/sr/LC_MESSAGES
+/usr/local/cs/grep-3.3/share/locale/sv
+/usr/local/cs/grep-3.3/share/locale/sv/LC_MESSAGES
+/usr/local/cs/grep-3.3/share/locale/th
+/usr/local/cs/grep-3.3/share/locale/th/LC_MESSAGES
+/usr/local/cs/grep-3.3/share/locale/tr
+/usr/local/cs/grep-3.3/share/locale/tr/LC_MESSAGES
+/usr/local/cs/grep-3.3/share/locale/uk
+/usr/local/cs/grep-3.3/share/locale/uk/LC_MESSAGES
+/usr/local/cs/grep-3.3/share/locale/vi
+/usr/local/cs/grep-3.3/share/locale/vi/LC_MESSAGES
+/usr/local/cs/grep-3.3/share/locale/zh_CN
+/usr/local/cs/grep-3.3/share/locale/zh_CN/LC_MESSAGES
+/usr/local/cs/grep-3.3/share/locale/zh_TW
+/usr/local/cs/grep-3.3/share/locale/zh_TW/LC_MESSAGES
+/usr/local/cs/grep-3.3/share/man
+/usr/local/cs/grep-3.3/share/man/man1
+/usr/local/cs/grep-3.3/share/info
+/usr/local/cs/grep-3.3/bin
+
+8. Of the files in the same directory as find, how many of them are symbolic links?
+List any shell commands you used to answer this question.
+
+Explanation : I first use which command to find out the path of the find command.
+              Then use the man command to read the descriptions of the find command and wc command.
+              I found out "type l" in find command about symbolic link.
+              I found out "-l" in wc command about printing the newline counts 
+
+
+Answer : which find (gives me /usr/bin/find) 
+       	 find /usr/bin -type l | wc -l
+
+	 There are 253 symbolic links in total.
+      	 
+9. What is the oldest regular file in the /usr/lib64 directory? Use the last-modified time
+to determine age. Specify the name of the file without the /usr/lib64/ prefix.
+Consider files whose names start with ".".
+List any shell commands you used to answer this question.
+
+Explanation : I first use man command to read the descriptions about find command.
+              Then, I found out "-t" in the descriptions about sort by modification time, newest first
+              Also, I found out "-l" about use a long listing format
+
+Answer : man ls
+       	 ls -t -l /usr/lib64
+
+	 The oldest regular file is librom1394.so.0.3.0
+
+10. Where does the locale command get its data from?
+List any shell commands you used to answer this question.
+
+Explanation : I first use the man command to read through the descriptions of the locale
+              command
+
+Answer : man locale
+       	 The locale command get its data from the environment variables in the shell profile
+	 file
+
+11. In Emacs, what commands have downcase in their name?
+List any Emacs commands you used to answer this question.
+
+Explanation : I read the GNU Emacs Reference Card and find out the Emacs command that
+describes show commands matching a string.
+
+Answer : C-h a downcase
+         
+         downcase-dwim
+         downcase-region
+         downcase-word
+
+12. Briefly, what do the Emacs keystrokes C-M-r through C-M-v do?
+Can you list their actions concisely?
+List any Emacs commands you used to answer this question.
+
+Explanation : I found out the descriptions each of the Emacs keystroke by using the command “C-h k” 
+              followed by the Emacs keystrokes.
+
+Answer: 
+	C-h k C-M-r
+	C-h k C-M-s
+	C-h k C-M-t
+	C-h k C-M-u
+	C-h k C-M-v
+
+	C-M-r : isearch-backward-regexp, do incremental search backward for regular expression.
+	C-M-s : isearch-forward-regexp, do incremental search forward for regular expression.
+	C-M-t : transpose-sexps, interchange characters around point, moving forward one character, but applies to sexps.
+	C-M-u : backward-up-list, move backward out of one level of parentheses.
+	C-M-v : scroll-down-command, scroll text of selected window down ARG lines;
+	 	 or near full screen if no ARG.
+
+13. In more detail, what does the Emacs keystroke C-g do?
+List any Emacs commands you used to answer this question.
+
+Explanation : I found out descriptions of the keystroke C-g by using command “C-h k” followed by the keystroke C-g.
+
+Answer : C-h k C-g
+
+	 C-g : command keyboard-quit, signal a `quit' condition.
+	 During execution of Lisp code, this character causes a quit directly.
+	 At top-level, as an editor command, this simply beeps.
+
+14. What does the Emacs yank function do, and how can you easily invoke it using keystrokes?
+List any Emacs commands you used to answer this question.
+
+Explanation : Based from the emacs reference card, I use "C-h f" to look up the descriptions
+	      of the yank function
+
+Answer : C-h f yank
+
+         yank is an interactive compiled Lisp function.
+         yank function reinsert ("paste") the last stretch of killed text.
+         It can be easily invoke by “C-y”
+
+15. When looking at the directory /usr/bin, what's the difference between the output of the
+ls -l command,and the directory listing of the Emacs dired command?
+List any shell or Emacs commands you used to answer this question.
+
+Answer : ls -l /usr/bin
+         emacs
+         C-h f dired
+         C-x d del del /usr/bin  (del refer to the delete keyboard)		
+
+        Both command shows file type, user, group, other permissions, number of hard links
+        user name, group name, size, date/time last modified, filename.
+        However, the Emacs dired command also shows total number of directory and the
+        number of available directory from there. The total number of directory from Emacs
+        is larger than the total number of directory from the Linux panel. 
+        Emacs : 297928
+        Linux : 297852
+	 
+
+       	 
+
+
