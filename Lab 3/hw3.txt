@@ -1,0 +1,61 @@
+Question 1 :
+
+The patch improve the performance of ls because users would be able to
+clearly distinguish between the option -a and the option -A under
+the ls command, instead of letting -a option overrides the option -A.
+After patching, the ls -a command would insert ‘.’ and ‘..’ before 
+listing all the current files and directories under the home directory 
+which is do not ignore entries starting with ‘.’ if being used alone. 
+The ls -A command also list the same files and directories but do not
+implied ‘.’ and ‘..’. After modification, if both option use at the same
+time, it would depends on the listing order. The last listing option would
+take effect into the listing format.
+
+Question 2 : 
+
+We have to watch out the conflict between our applied patched version and 
+the actual new patched version from the coreutils developer due the way
+the diff command operate. After applying our applied patched version, it will
+change and affect the line number. However, the default version would 
+not recognized the difference due to the fact it is developed 
+and applied globally. 
+
+Question 3 : 
+
+Output : 
+
+  File "randline.py", line 70, in <module>
+    main()
+  File "randline.py", line 64, in main
+    sys.stdout.write(generator.chooseline())
+  File "randline.py", line 34, in chooseline
+    return random.choice(self.lines)
+  File "/usr/local/cs/Python-2.7.15/lib/python2.7/random.py", line 277, 
+  in choice
+  return seq[int(self.random() * len(seq))]  # raises IndexError if seq is empty
+  IndexError: list index out of range
+
+When script is invoked on an empty file such as /dev.null, it run into 
+a index error saying the list index is out of range when we try to execute
+the random choice function on an empty file which means there is no lines
+that could be read from and select to be the randomly selected output. 
+The random choice function is accessing the lines from the file as index. 
+When it comes to empty files, we are trying to access something 
+that is out of index.
+
+Question 4 : 
+
+Output : 
+
+File "randline.py", line 65
+    except IOError as (errno, strerror):
+                      ^
+SyntaxError: invalid syntax
+
+When the script is invoked with Python3 rather than Python2, 
+it shows up a invalid syntax error. It is because tuple unpacking 
+is not accepted as exceptions and 
+argument list in python3. 
+It does not have automatic tuple unpacking in python3.
+
+ 

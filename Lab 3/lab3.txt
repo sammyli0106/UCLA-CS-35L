@@ -1,0 +1,188 @@
+1. I first grabbed the coreutils 8.29 source code compressed tarball
+   ,the signature and the GNU keyring and verify by the follow command
+
+ Command : wget ftp://ftp.gnu.org/gnu/coreutils/coreutils-8.29.tar.xz.sig
+
+   Output  : --2019-01-28 11:18:15--  ftp://ftp.gnu.org/gnu/coreutils/     
+             coreutils-8.29.tar.xz.sig
+                        => ‘coreutils-8.29.tar.xz.sig’
+             Resolving ftp.gnu.org (ftp.gnu.org)... 209.51.188.20, 2001:470
+             :142:3::b
+             Connecting to ftp.gnu.org (ftp.gnu.org)|209.51.188.20|:21... 
+             connected.
+             Logging in as anonymous ... Logged in!
+             ==> SYST ... done.    ==> PWD ... done.
+             ==> TYPE I ... done.  ==> CWD (1) /gnu/coreutils ... done.
+             ==> SIZE coreutils-8.29.tar.xz.sig ... 801
+             ==> PASV ... done.    ==> RETR coreutils-8.29.tar.xz.sig ... done.
+             Length: 801 (unauthoritative)   
+
+             2019-01-28 11:18:16 (99.4 MB/s) - ‘coreutils-8.29.tar.xz.sig’ 
+             saved [801]
+
+  Command  : wget https://ftp.gnu.org/gnu/gnu-keyring.gpg
+
+  Output   : --2019-01-28 11:21:01--  https://ftp.gnu.org/gnu/gnu-keyring.gpg
+             Resolving ftp.gnu.org (ftp.gnu.org)... 209.51.188.20, 2001:470
+             :142:3::b
+             Connecting to ftp.gnu.org (ftp.gnu.org)|209.51.188.20|:443... 
+             connected.
+             HTTP request sent, awaiting response... 200 OK
+             Length: 2349374 (2.2M)
+             Saving to: ‘gnu-keyring.gpg’ 
+
+             2019-01-28 11:21:02 (4.75 MB/s) - ‘gnu-keyring.gpg’ saved 
+             [2349374/2349374]
+ 
+  Command  : gpg --verify --keyring ./gnu-keyring.gpg coreutils-8.29.tar.xz.sig
+
+  Output   : gpg: directory `/u/cs/ugrad/sum/.gnupg' created
+             gpg: new configuration file `/u/cs/ugrad/sum/.gnupg/gpg.conf' 
+             created
+             gpg: WARNING: options in `/u/cs/ugrad/sum/.gnupg/gpg.conf' 
+             are not yet active during this run
+             gpg: keyring `/u/cs/ugrad/sum/.gnupg/pubring.gpg' created
+             gpg: Signature made Wed 27 Dec 2017 10:29:05 AM PST using 
+             RSA key ID 306037D9
+             gpg: /u/cs/ugrad/sum/.gnupg/trustdb.gpg: trustdb created
+             gpg: Good signature from "Pádraig Brady <P@draigBrady.com>"
+             gpg:                 aka "Pádraig Brady <pbrady@redhat.com>"
+             gpg:                 aka "Pádraig Brady <pixelbeat@gnu.org>"
+             gpg: WARNING: This key is not certified with a trusted signature!
+             gpg: There is no indication that the signature belongs 
+             to the owner.
+             Primary key fingerprint: 6C37 DC12 121A 5006 BC1D B804 DF6F 
+             D971 3060 37D9
+ 
+  Explanation : It shows up a warning message saying “the key is 
+               not certified with a trusted signature”. 
+               The reason of the warning is the author is not
+               listed as trusted developer. The purpose of it is 
+               to prevent someone who try to tamper file 
+               during the process of encryption.
+
+2. After that, I downloaded the coreutils-8.29 packages.
+   I untag and unzip the coreutils-8.29 by following command.
+   Then, I create a directory called ~/coreutilsInstall at my home directory.
+   I go into the coreutils-8.29 directory and read the install file about
+   about configure “make”. After that, I find out my absolute path and 
+   compile and install the copy of coreutils into the created directory
+
+   Command : wget https://ftp.gnu.org/gnu/coreutils/coreutils-8.29.tar.xz
+
+   Output : --2019-01-28 11:15:37-- https://ftp.gnu.org/gnu/coreutils/
+             coreutils-8.29.tar.xz
+             Resolving ftp.gnu.org (ftp.gnu.org)... 209.51.188.20,
+             2001:470:142:3::b
+             Connecting to ftp.gnu.org (ftp.gnu.org)|209.51.188.20|:443... 
+             connected.
+             HTTP request sent, awaiting response... 200 OK
+             Length: 5286588 (5.0M) [application/x-tar]
+             Saving to: ‘coreutils-8.29.tar.xz’
+   
+   
+   Command : tar -xJvf coreutils-8.29.tar.xz
+   
+   Output  : coreutils-8.29/
+             coreutils-8.29/.version
+             coreutils-8.29/.vg-suppressions
+             coreutils-8.29/COPYING
+             coreutils-8.29/bootstrap
+             coreutils-8.29/bootstrap.conf
+             coreutils-8.29/m4/
+             coreutils-8.29/m4/stdbool.m4
+             coreutils-8.29/m4/hard-locale.m4
+             coreutils-8.29/m4/stat-size.m4
+
+   Command  : mkdir ~/coreutilsInstall
+              cd coreutils-8.29
+              ls
+              emacs INSTALL
+              cd ..
+              cd coreutilsInstall
+              pwd	(this gives me : /u/cs/ugrad/sum/coreutilsInstall)
+              cd ..
+              cd coreutils-8.29
+              ./configure --prefix=/u/cs/ugrad/sum/coreutilsInstall
+
+  Output : checking for a BSD-compatible install... /usr/local/cs/bin/install -c
+            checking whether build environment is sane... yes
+            checking for a thread-safe mkdir -p... /usr/local/cs/bin/mkdir -p
+            checking for gawk... gawk
+
+  Command : make
+  Output  : GEN      lib/alloca.h
+            GEN      lib/arpa/inet.h
+            GEN      lib/configmake.h
+            GEN      lib/ctype.h
+            GEN      lib/dirent.h
+   
+  Command : make install
+  Output  : installing af.gmo as /u/cs/ugrad/sum/coreutilsInstall/share/locale
+            /af/LC_MESSAGES/coreutils.mo
+            installing af.gmo link as /u/cs/ugrad/sum/coreutilsInstall
+            /share/locale/af/
+            LC_TIME/coreutils.mo
+
+3. I move back to my created directory and try to reproduce the bug
+   by the following command
+
+   Command : cd coreutilsInstall
+             cd bin
+             ./ls -aA 
+             (produce the bug to see the “.” and “..” for the output)
+
+4. Then I go back to the coreutils-8.29 and create a patch file that contains
+   the patch content. I patch the content by using the patch command. 
+   
+   Command : cd coreutils-8.29
+             emacs patching.diff (copy and paste the patch content)
+             patch -p1 < patching.diff
+   
+   Output : patching file src/ls.c
+            patch unexpectedly ends in middle of line
+            Hunk #1 succeeded at 1900 with fuzz 1 (offset -3 lines).
+
+5. After that, I use make command to rebuild the patched ls command.
+
+   Command : make
+
+6. I retest the command by testing the modified ls works in the coreutils-8.29.
+   After that, I did not see the bug anymore which is 
+   the “.” and “..” for the output. 
+   
+   Command : cd coreutils-8.29
+             cd src
+             
+   Command : ./ls -aA
+
+   Output : ‘[‘
+            b2sum
+            base32
+            base64
+  
+   Command : ./ls -Aa
+   Output  : .
+             ..
+             ‘[‘
+             b2sum
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
