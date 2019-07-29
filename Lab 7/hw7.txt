@@ -1,0 +1,22 @@
+1. I first use wget to download the skeleton tarball.
+
+Command : wget https://web.cs.ucla.edu/classes/winter19/cs35L/assign/dlskeleton.tgz
+
+Output : --2019-02-26 12:43:32--  https://web.cs.ucla.edu/classes/winter19/cs35L/assign/dlskeleton.tgz
+Resolving web.cs.ucla.edu (web.cs.ucla.edu)... 131.179.128.29
+Connecting to web.cs.ucla.edu (web.cs.ucla.edu)|131.179.128.29|:443... connected.
+HTTP request sent, awaiting response... 200 OK
+Length: 14392 (14K) [application/x-gzip]
+Saving to: ‘dlskeleton.tgz’
+
+100%[===============================================>] 14,392      --.-K/s   in 0s      
+
+2019-02-26 12:43:32 (179 MB/s) - ‘dlskeleton.tgz’ saved [14392/14392]
+
+2. Unzip the file
+
+Command : tar -xf dlskeleton.tgz
+
+Output : COPYING dlskeleton.tgz  library.txt~  randall.c    randlib.h 
+ library.txt     Makefile      randcpuid.h 
+
