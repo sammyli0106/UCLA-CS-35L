@@ -1,0 +1,19 @@
+1. For the upper half window : 
+
+For the leftmost window, it shows a lot of commits and display through
+a hierarchical tree. Aside from showing the commits, the tree also shows the
+specific relationships, HEAD pointers with the branches. 
+
+For the middle window, it shows the name and the email of the author for the
+commits that are being showed at the right window.
+
+For the right window, it displays the commit date information for the 
+corresponding author.
+
+2. For the lower half window : 
+
+For the left window, it display corresponding commits’ Changelog and it is in 
+the diff format for the file. It also shows information about author, committer
+parent, child, branches, follows, precedes.
+
+For the right window, it shows all the impacted files by the selected commit.
